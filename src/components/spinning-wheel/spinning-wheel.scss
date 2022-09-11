@@ -1,0 +1,51 @@
+.wheel-container {
+  z-index: -3;
+  .wheel {
+    width: 50em;
+    height: 50em;
+    border: 1px solid black;
+    position: relative;
+    padding: 0;
+    border-radius: 50%;
+    list-style: none;
+    overflow: hidden;
+  }
+
+  .part {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .content {
+      filter: invert(100%) drop-shadow(2px 4px 6px black);
+      position: absolute;
+      left: -100%;
+      width: 200%;
+      height: 200%;
+      align-content: center;
+      text-align: center;
+      display: block;
+
+      .happy {
+        height: 8em;
+        width: 8em;
+      }
+
+      .skull {
+        height: 10em;
+        width: 10em;
+      }
+    }
+  }
+
+  .segment-detector {
+    width: 1px;
+    height: 1px;
+    background-color: crimson;
+
+    position: fixed;
+    top: 1.2em;
+    left: 50%;
+  }
+}

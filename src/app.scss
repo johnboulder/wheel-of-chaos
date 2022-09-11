@@ -1,0 +1,28 @@
+.header {
+  text-align: center;
+  font-family: blanka;
+  font-size: 5em;
+  color: white;
+  filter: drop-shadow(2px 4px 6px black);
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  background: black url(./assets/agents_of_chaos_background.svg) no-repeat fixed center;
+  background-size: cover;
+}
+
+$red: #F8333C;
+$pink_lace: #EFCEFA;
+$hot_pink: #FF6FB5;
+$lemon_yellow_crayola: #FCF69C;
+$turquoise: #55D8C1;
+$purple_plum: #AB46D2;
+
+$blue1: #2B335A;
+$blue2: #B6E5FC;
+$blue3: #5D7897;
+$blue4: #91B1CE;
+$blue5: #33496A;
+$blue6: #0084D5;

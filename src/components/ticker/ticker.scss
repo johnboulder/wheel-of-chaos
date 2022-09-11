@@ -1,0 +1,27 @@
+.ticker {
+  .circle {
+    filter: drop-shadow(2px 4px 6px black);
+    position: absolute;
+    left: 46.1%;
+    top: 41%;
+    background-color: white;
+    height: 10em;
+    width: 10em;
+    border-radius: 50%;
+    display: inline-block;
+    z-index: -1;
+  }
+  .triangle {
+    filter: drop-shadow(2px 4px 6px black);
+    position: absolute;
+    top: 39.8%;
+    left: 49.2%;
+    width: 0;
+    height: 0;
+    border-left: 1em solid transparent;
+    border-right: 1em solid transparent;
+
+    border-bottom: 1em solid white;
+    z-index: -2;
+  }
+}
