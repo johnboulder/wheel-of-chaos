@@ -174,5 +174,13 @@ export const getRotationDegreesOfNextSegment = (startPositionDegrees: number, an
     console.log(`Interval value: ${randomIntervalValue}`);
     console.log(`lower bound: ${nextSpinSegment.lower} | upper bound: ${nextSpinSegment.upper}`);
   }
-  return animationRotationConstant + startPositionDegrees + randomIntervalValue;
+
+  const remainder = startPositionDegrees % animationRotationConstant;
+  const runningRotationTotal = startPositionDegrees - remainder;
+
+  console.log(`animationRotationConstant: ${animationRotationConstant}`);
+  console.log(`runningRotationTotal: ${runningRotationTotal}`);
+  console.log(`randomIntervalValue: ${randomIntervalValue}`);
+
+  return animationRotationConstant + runningRotationTotal + randomIntervalValue;
 };
