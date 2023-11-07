@@ -3,7 +3,8 @@ import './spinning-wheel.scss';
 import {
   detectSegmentIntersection,
   getContentSkewY,
-  getNextSpinSegment, getRotationDegreesOfNextSegment,
+  getNextSpinSegment,
+  getRotationDegreesOfNextSegment,
   getScale, getSegmentSearchInfo,
   getSegmentSize,
   getSkewY,
@@ -16,6 +17,7 @@ import skullIcon from '../../assets/skull_icon.svg';
 import laughingIcon from '../../assets/laughing-icon.svg';
 import {ShowCover} from "../show-cover/show-cover";
 import {usePressObserver} from "../../utils/use-press-observer";
+import {SegmentDetector} from "./segment-detector";
 
 const performerList: string[] = [
   'Jarell Barnes',
@@ -47,20 +49,11 @@ const spinOrder: string[] = [
   'punishment',
 ];
 
-const degreeOrder: number[] = [
-  4433,
-  8923,
-  13606,
-  18164,
-  22398,
-  26694,
-  31279,
-];
-
 const showCoverStyle: CSSProperties = {
   opacity: '100%',
   transition: 'ease-in-out 5s'
 };
+
 const hideCoverStyle: CSSProperties = {
   opacity: '0%',
   transition: 'ease-in-out 5s'
@@ -76,7 +69,7 @@ export interface WheelProps {
   wheelValues: Part[];
 }
 
-export const SpinningWheel: React.FC<WheelProps> = (props) => {
+export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   const {wheelValues} = props;
 
   const segmentSize = getSegmentSize(wheelValues.length);
@@ -115,9 +108,8 @@ export const SpinningWheel: React.FC<WheelProps> = (props) => {
     );
   });
 
-  // TODO randomize the time spent spinning
+  // TODO randomize the time spent spinning?
   const animationDuration = 10000;
-  const animationRotationConstant = 360 * 12;
   const [spinIterator, setSpinIterator] = useState<number>(0);
   const [nextAnimationDegrees, setNextAnimationDegrees] = useState<number>(0);
 
@@ -143,8 +135,8 @@ export const SpinningWheel: React.FC<WheelProps> = (props) => {
 
   useEffect(() => {
     if (isSpacebarPressed) {
-      const nextSpinSegment = getNextSpinSegment(segmentSearchInfo, spinOrder, spinOrder[spinIterator]);
-      const updatedNextAnimationDegrees = getRotationDegreesOfNextSegment(nextAnimationDegrees, animationRotationConstant, nextSpinSegment);
+      const nextSpinSegment = getNextSpinSegment(segmentSearchInfo, spinOrder[spinIterator]);
+      const updatedNextAnimationDegrees = getRotationDegreesOfNextSegment(nextAnimationDegrees, nextSpinSegment);
       setNextAnimationDegrees(updatedNextAnimationDegrees);
       setIsSpinning(!isSpinning);
     }
@@ -168,7 +160,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props) => {
   return (
     <>
       <div className='wheel-container'>
-        <div className='segment-detector'/>
+        <SegmentDetector/>
         <Transition<undefined> in={isSpinning} timeout={animationDuration} addEndListener={endListener}>
           {state => (
             <div className='wheel' style={{

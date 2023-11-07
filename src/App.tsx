@@ -1,13 +1,10 @@
 import React, {CSSProperties, useEffect, useState} from 'react'
 
 import {Part, SpinningWheel} from "./components/spinning-wheel/spinning-wheel";
-import logo from './assets/agents_of_chaos_header_image.svg'
 
 import './app.scss';
-import {PerformerTitleCard} from "./components/performer-title/performer-title-card";
 import {Ticker} from "./components/ticker/ticker";
 import {ShowCover} from "./components/show-cover/show-cover";
-import {Transition} from "react-transition-group";
 
 // TODO move button into this container
 
@@ -46,20 +43,20 @@ const App = () => {
   return (
     <>
       {isShowStarted &&
-          <>
-              <div className='container'>
-                  <div className='row'>
-                      <div className='col s2'/>
-                      <div className='header col s8' style={{animation: '3s pulse ease-in-out infinite'}}>
-                          <div>Agents of Chaos</div>
-                      </div>
-                  </div>
-                  <div className='valign-wrapper' style={{justifyContent: 'center'}}>
-                      <SpinningWheel wheelValues={wheelValues} />
-                  </div>
+        <>
+          <div className='container'>
+            <div className='row'>
+              <div className='col s2'/>
+              <div className='header col s8' style={{animation: '3s pulse ease-in-out infinite'}}>
+                <div>Agents of Chaos</div>
               </div>
-              <Ticker/>
-          </>
+            </div>
+            <div className='valign-wrapper' style={{justifyContent: 'center'}}>
+              <SpinningWheel wheelValues={wheelValues} />
+            </div>
+          </div>
+          <Ticker/>
+        </>
       }
       <div style={isShowStarted ? hiddenStyle : defaultStyle}>
         <ShowCover>Agents of Chaos</ShowCover>

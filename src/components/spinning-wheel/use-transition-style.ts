@@ -11,6 +11,12 @@ export type TransitionState = {
   'exited': CSSProperties,
 };
 
+/**
+ * Custom hook used for setting the degrees of rotation of the animation you would like to perform.
+ *
+ * @returns A setter for setting the degrees of rotation, and the TransitionState styles for use by the
+ * react-transition-group Transition component.
+ */
 export const useTransitionStyle = (animationDegrees: number): UseTransitionStyle => {
   const [transitionStyles, setTransitionStyleState] = useState(
     {

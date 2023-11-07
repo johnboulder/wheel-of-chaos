@@ -1,44 +1,39 @@
 // style="background-color: rgb(218, 247, 166); width: 100%; height: 100%; transform-origin: 50% 50%; transform: rotate(45deg) skewX(-30deg) skewY(-30deg) translateY(-50%) translateX(-50%);"
 
-import {CSSProperties} from "react";
 import {Part} from "./spinning-wheel";
-import {Transition} from "react-transition-group";
+import {SEGMENT_DETECTOR_CLASS} from "./constants";
 
-const partStyleThreeSegments: CSSProperties = {
-  // where transformations are applied on the object
-  // rotate - 45deg is the base rotation, and we use a multiple of 120 (since each shape accounts for 120deg)
-  // skewX and skewY - we're subtracting 30 degrees from each side of the shape (which makes 180deg by default) to create a 120deg angle
-  // translate - we subtract 50% of the shape's distance on the x and y axis to move the point to the center where it meets the other shapes of the pie
-  transform: 'translateY(-50%) rotate(0deg) skewY(60deg);',
-  width: '50%',
-  height: '100%',
-};
+export interface SegmentSearchInfo {
+  lower: number;
+  upper: number;
+  isPunishment: boolean;
+}
 
-export const getPartCommonStyle = () => {
-  // width: 100%; height: 100%;
-  // transform-origin: 50% 50%;
-  // transform: rotate(45deg) skewX(-30deg) skewY(-30deg) translateY(-50%) translateX(-50%);"
+/**
+ * A multiple of 360.
+ * This represents the base number of wheel rotations we use for each spin. Enough that it looks like a natural spin.
+ */
+export const DEFAULT_ANIMATION_ROTATION_CONSTANT: number = 360 * 12;
 
 
-};
-
-/*
-* The size, in degrees, of each segment of the circle.
-* Found by dividing 360 by the number of segments.
-*/
+/**
+ * The size, in degrees, of each segment of the circle.
+ * Found by dividing 360 by the number of segments.
+ *
+ * @param segmentCount The desired number of wheel segments.
+ */
 export const getSegmentSize = (segmentCount: number): number => {
   return (360 / segmentCount);
 };
 
-/*
-* Skew refers to how much we are distorting the geometric plane of the object by.
-* We represent this value in degrees.
-* Assuming each piece of the circle is a square, and has a 90 degree angle by default
-* The value returned here represents the degrees needed to subtract from 90 to fill
-* the piece of the circle it's responsible for.
-* i.e. If we have 9 segments, each would be rotated by 40 degrees, and the skew would be -50
-* since we want the corners of the square to appear at 40 degrees.
-*/
+/**
+ * Skew refers to how much we are distorting the geometric plane of the object. We represent this value in degrees.
+ * Assuming each piece of the circle is a square, and has a 90 degree angle by default, the value returned here
+ * represents the degrees needed to subtract from 90 to fill the piece of the circle it's responsible for.
+ *
+ * i.e. If we have 9 segments, each would be rotated by 40 degrees, and the skew would be -50 since we want the
+ * corners of the square to appear at 40 degrees.
+ */
 export const getSkewY = (segmentCount: number): string => {
   const segmentSize = getSegmentSize(segmentCount);
   if (segmentCount === 1) {
@@ -53,12 +48,12 @@ export const getSkewY = (segmentCount: number): string => {
   return `-${90 - segmentSize}deg`;
 };
 
-/*
-* Represents the same kind of value as skewY, but with respect to the content
-* displayed within each circle segment. Since each segment is skewed to some degree,
-* the content inside is skewed by the number we subtract from 90, so we simply
-* need to calculate this, and add it back.
-*/
+/**
+ * Represents the same kind of value as skewY, but with respect to the content
+ * displayed within each circle segment. Since each segment is skewed to some degree,
+ * the content inside is skewed by the number we subtract from 90, so we simply
+ * need to calculate this, and add it back.
+ */
 export const getContentSkewY = (segmentCount: number): number => {
   const segmentSize = getSegmentSize(segmentCount);
   if (segmentCount === 1) {
@@ -73,10 +68,16 @@ export const getContentSkewY = (segmentCount: number): number => {
   return 90 - segmentSize;
 };
 
+/**
+ * NOT IMPLEMENTED - RETURNS A CONSTANT VALUE
+ */
 export const getWidthAndHeight = (segmentCount: number): number[] => {
   return [50, 50];
 };
 
+/**
+ * TODO can't tell if this is implemented, need to revisit it.
+ */
 export const getScale = (segmentCount: number): string => {
   if (segmentCount === 1) {
     return '1';
@@ -89,6 +90,9 @@ export const getScale = (segmentCount: number): string => {
   return '1';
 };
 
+/**
+ *
+ */
 export const getTransformOrigin = (segmentCount: number): string => {
   if (segmentCount === 1) {
     return '50% 50%';
@@ -99,15 +103,15 @@ export const getTransformOrigin = (segmentCount: number): string => {
   return '0 100%'
 };
 
-export interface SegmentSearchInfo {
-  lower: number;
-  upper: number;
-  isPunishment: boolean;
-}
-
-/*
-*
-*/
+/**
+ * Creates an array of objects representing wheel segments that simplify the calculations we perform to find things
+ * like where the next segment is relative to the current wheel position, and how the wheel should spin to make it
+ * to that segment.
+ *
+ * @param wheelValues An array of objects representing visual components of the wheel segments.
+ *
+ * @returns Array of SegmentSearchInfo objects that represent each individual segment of the wheel.
+ */
 export const getSegmentSearchInfo = (wheelValues: Part[]): SegmentSearchInfo[] => {
   const segmentCount = wheelValues.length;
   const segmentSearchInfo: SegmentSearchInfo[] = [];
@@ -125,7 +129,19 @@ export const getSegmentSearchInfo = (wheelValues: Part[]): SegmentSearchInfo[] =
   return segmentSearchInfo;
 };
 
-export const getNextSpinSegment = (segmentSearchInfo: SegmentSearchInfo[], spinOrder: string[], nextSpinType: string): SegmentSearchInfo => {
+/**
+ * Gets the info of the next segment that the wheel will land on, at random, based on whether the segment is a
+ * safe or punishment segment.
+ *
+ * @param segmentSearchInfo The array of SegmentSearchInfo objects that represent the wheel.
+ * @param nextSpinType String representing the type of the next segment we wish to land on. ("punishment" or "safe")
+ *
+ * @returns The SegmentSearchInfo object representing the next segment the wheel should land on.
+ */
+export const getNextSpinSegment = (
+    segmentSearchInfo: SegmentSearchInfo[],
+    nextSpinType: string
+): SegmentSearchInfo => {
   const punishmentIndexes: number[] = [];
   const safeIndexes: number[] = [];
 
@@ -149,8 +165,11 @@ export const getNextSpinSegment = (segmentSearchInfo: SegmentSearchInfo[], spinO
   return chosenSegmentData;
 };
 
+/**
+ * Using
+ */
 export const detectSegmentIntersection = (e: TransitionEvent, done: any) => {
-  const segmentDetector = document.querySelector('.segment-detector');
+  const segmentDetector = document.querySelector(`.${SEGMENT_DETECTOR_CLASS}`);
   const rectangle = segmentDetector!.getBoundingClientRect();
   const x = rectangle.left;
   const y = rectangle.top;
@@ -166,21 +185,33 @@ export const randomIntFromInterval = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export const getRotationDegreesOfNextSegment = (startPositionDegrees: number, animationRotationConstant: number, nextSpinSegment: SegmentSearchInfo) => {
-  const randomIntervalValue = randomIntFromInterval(nextSpinSegment.lower, nextSpinSegment.upper);
+/**
+ * Finds the numeric value in degrees of the wheel's next resting position.
+ *
+ * Does this by getting a random value between the start and end positions of the nextSpinSegment,
+ *
+ * @param startPositionDegrees The numeric value in degrees of the starting position of the spin being performed.
+ * @param nextSpinSegment The information representing the next segment we wish to have the wheel land on.
+ * @param baseRotationValueDegrees The minimum number of full rotations to perform. Defaults to DEFAULT_ANIMATION_ROTATION_CONSTANT
+ */
+export const getRotationDegreesOfNextSegment = (
+    startPositionDegrees: number,
+    nextSpinSegment: SegmentSearchInfo,
+    baseRotationValueDegrees: number = DEFAULT_ANIMATION_ROTATION_CONSTANT) => {
+  const randomIntervalValue: number = randomIntFromInterval(nextSpinSegment.lower, nextSpinSegment.upper);
 
   if(randomIntervalValue < nextSpinSegment.lower || randomIntervalValue > nextSpinSegment.upper) {
-    console.log('Interval value is outsize of interval bounds!');
+    console.log('Interval value is outside of interval bounds!');
     console.log(`Interval value: ${randomIntervalValue}`);
     console.log(`lower bound: ${nextSpinSegment.lower} | upper bound: ${nextSpinSegment.upper}`);
   }
 
-  const remainder = startPositionDegrees % animationRotationConstant;
-  const runningRotationTotal = startPositionDegrees - remainder;
+  const remainder: number = startPositionDegrees % baseRotationValueDegrees;
+  const runningRotationTotal: number = startPositionDegrees - remainder;
 
-  console.log(`animationRotationConstant: ${animationRotationConstant}`);
+  console.log(`animationRotationConstant: ${baseRotationValueDegrees}`);
   console.log(`runningRotationTotal: ${runningRotationTotal}`);
   console.log(`randomIntervalValue: ${randomIntervalValue}`);
 
-  return animationRotationConstant + runningRotationTotal + randomIntervalValue;
+  return baseRotationValueDegrees + runningRotationTotal + randomIntervalValue;
 };
