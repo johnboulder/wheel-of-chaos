@@ -92,7 +92,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     };
 
     const contentStyle: CSSProperties = {
-      paddingTop: '25%',
+      paddingBottom: '125%',
       transform: `skewY(${contentSkewY}deg) rotate(${contentRotation}deg)`,
     };
 
