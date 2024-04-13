@@ -182,7 +182,13 @@ export const detectSegmentIntersection = (e: TransitionEvent, done: any) => {
 };
 
 export const randomIntFromInterval = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  let value = Math.floor(Math.random() * (max - min + 1) + min);
+  // If value is in the exact middle, keep randomizing. (we want the illusion of natural behavior)
+  while(Math.abs((max - min + 1 )/2) <= 5) {
+    value = Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  return value;
 }
 
 /**
@@ -198,7 +204,7 @@ export const getRotationDegreesOfNextSegment = (
     startPositionDegrees: number,
     nextSpinSegment: SegmentSearchInfo,
     baseRotationValueDegrees: number = DEFAULT_ANIMATION_ROTATION_CONSTANT) => {
-  const randomIntervalValue: number = randomIntFromInterval(nextSpinSegment.lower, nextSpinSegment.upper);
+  let randomIntervalValue: number = randomIntFromInterval(nextSpinSegment.lower, nextSpinSegment.upper);
 
   if(randomIntervalValue < nextSpinSegment.lower || randomIntervalValue > nextSpinSegment.upper) {
     console.log('Interval value is outside of interval bounds!');
