@@ -40,12 +40,12 @@ const punishmentList: string[] = [
 ];
 
 const spinOrder: string[] = [
-  'safe',
   'punishment',
   'punishment',
-  'safe',
   'punishment',
-  'safe',
+  'punishment',
+  'punishment',
+  'punishment',
   'punishment',
 ];
 
@@ -109,7 +109,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   });
 
   // TODO randomize the time spent spinning?
-  const animationDuration = 10000;
+  const animationDuration = 5000;
   const [spinIterator, setSpinIterator] = useState<number>(0);
   const [nextAnimationDegrees, setNextAnimationDegrees] = useState<number>(0);
 
