@@ -12,9 +12,19 @@
 .vr-lady {
   img {
     position: absolute;
+    left: 37.5%;
+    bottom: 9%;
+    height: 600px;
+    filter: drop-shadow(2px 4px 6px black);
+    z-index: 4;
+  }
+}
+
+.title-with-skull {
+  img {
+    position: absolute;
     left: 34.5%;
     bottom: 9%;
-    width: 600px;
     height: 600px;
     filter: drop-shadow(2px 4px 6px black);
     z-index: 4;

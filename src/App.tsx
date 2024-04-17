@@ -20,7 +20,7 @@ const App = () => {
     {value: 'punishment', color: '#AB46D2', isPunishment: true},
   ];
 
-  const [isShowStarted, setIsShowStarted] = useState<boolean>(true);
+  const [isShowStarted, setIsShowStarted] = useState<boolean>(false);
   const defaultStyle: CSSProperties = {
     opacity: '100%',
   };
@@ -61,9 +61,7 @@ const App = () => {
         </>
       }
       <div style={isShowStarted ? hiddenStyle : defaultStyle}>
-        <ShowCover>
-          <img alt="show title" src={titleWithSkull}/>
-        </ShowCover>
+        <ShowCover/>
       </div>
     </>
   )

@@ -22,27 +22,24 @@ import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
 import useSound from "use-sound";
 
 const performerList: string[] = [
-  'Jarell Barnes',
-  'Maddie Daviss',
+  'Bob Keen',
   'Emily Ogle',
-  'Megan McMurtry',
-  'Zach Dietsch',
-  'Sohrab Forouzesh',
-  'Max Shanker',
+  'Brian Lirot',
+  'Andrew Shankland',
+  'Obi Ehn',
+  'Alexa Jaggs',
 ];
 
 const punishmentList: string[] = [
-  'Normal Set',
-  'Chaos Coaster',
-  'Doggy Daycare',
-  'Normal Set',
-  'Blind and Bumpin',
-  'Normal Set',
-  'MULTI-PUNISHMENT',
+  'The Execution',
+  'In Memoriam',
+  'Blind, Deaf, Smart',
+  'A Little Ambiance',
+  'Action Footage',
+  'TikTok Live',
 ];
 
 const spinOrder: string[] = [
-  'punishment',
   'punishment',
   'punishment',
   'punishment',
