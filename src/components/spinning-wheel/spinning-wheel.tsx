@@ -13,11 +13,13 @@ import {
 } from "./wheel-utils";
 import {Transition} from "react-transition-group";
 import {useTransitionStyle} from "./use-transition-style";
-import skullIcon from '../../assets/skull_icon.svg';
+import skullIcon from '../../assets/skull.png';
 import laughingIcon from '../../assets/laughing-icon.svg';
 import {ShowCover} from "../show-cover/show-cover";
 import {usePressObserver} from "../../utils/use-press-observer";
 import {SegmentDetector} from "./segment-detector";
+import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
+import useSound from "use-sound";
 
 const performerList: string[] = [
   'Jarell Barnes',
@@ -121,7 +123,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   const [transitionStyles, setTransitionStyles] = useTransitionStyle(nextAnimationDegrees);
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
   const [showCoverMessage, setShowCoverMessage] = useState<boolean>(false);
-
+  const [playTriPoloski, { stop: stopTriPoloski }] = useSound(triPoloskiMusic);
   const [isSpacebarPressed, setIsSpacebarPressed] = usePressObserver("space");
 
   const hideShowCoverCallback = () => {
@@ -139,6 +141,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
       const updatedNextAnimationDegrees = getRotationDegreesOfNextSegment(nextAnimationDegrees, nextSpinSegment);
       setNextAnimationDegrees(updatedNextAnimationDegrees);
       setIsSpinning(!isSpinning);
+      playTriPoloski()
     }
   }, [isSpacebarPressed]);
 
@@ -154,6 +157,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
       // TODO if spin iterator is greater than spin order, we need to have an end animation or something
       setSpinIterator(spinIterator + 1);
       setShowCoverMessage(!showCoverMessage);
+      stopTriPoloski()
     }, false);
   }
 

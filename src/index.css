@@ -2,3 +2,7 @@
     font-family: blanka;
     src: url(assets/fonts/Blanka-Regular.otf) format("opentype");
 }
+
+.show-title {
+    width: 85%
+}
