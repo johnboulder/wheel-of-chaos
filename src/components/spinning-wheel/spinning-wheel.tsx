@@ -20,23 +20,24 @@ import {usePressObserver} from "../../utils/use-press-observer";
 import {SegmentDetector} from "./segment-detector";
 import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
 import useSound from "use-sound";
+import {Ticker} from "../ticker/ticker";
 
 const performerList: string[] = [
-  'Bob Keen',
-  'Emily Ogle',
-  'Brian Lirot',
-  'Andrew Shankland',
-  'Obi Ehn',
-  'Alexa Jaggs',
+  'Jonah Eggleston',
+  'Adam de La Fuente',
+  'Elaine Golden',
+  'Gena Gephart',
+  'Sam Biru',
+  'Cameron Gillette',
 ];
 
 const punishmentList: string[] = [
-  'The Execution',
-  'In Memoriam',
-  'Blind, Deaf, Smart',
-  'A Little Ambiance',
-  'Action Footage',
-  'TikTok Live',
+  'Blind, Deaf, Smart!',
+  'SHOTS! SHOTS! SHOTS!',
+  'Jumbotron!',
+  'My Cousin Joey!',
+  'Jack Bauer!',
+  'The Female Experience!',
 ];
 
 const spinOrder: string[] = [
@@ -47,6 +48,15 @@ const spinOrder: string[] = [
   'punishment',
   'punishment',
 ];
+
+/**
+ * TODO
+ * - Shorten spin time
+ * - Shorten music
+ * - Update background with spinner image
+ * - Configure names and titles to appear within the window for any name length
+ * - Disable spacebar scrolling
+ */
 
 const showCoverStyle: CSSProperties = {
   opacity: '100%',
@@ -120,7 +130,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   const [transitionStyles, setTransitionStyles] = useTransitionStyle(nextAnimationDegrees);
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
   const [showCoverMessage, setShowCoverMessage] = useState<boolean>(false);
-  const [playTriPoloski, { stop: stopTriPoloski }] = useSound(triPoloskiMusic);
+  const [playSpinMusic, { stop: stopSpinMusic }] = useSound(triPoloskiMusic);
   const [isSpacebarPressed, setIsSpacebarPressed] = usePressObserver("space");
 
   const hideShowCoverCallback = () => {
@@ -138,7 +148,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
       const updatedNextAnimationDegrees = getRotationDegreesOfNextSegment(nextAnimationDegrees, nextSpinSegment);
       setNextAnimationDegrees(updatedNextAnimationDegrees);
       setIsSpinning(!isSpinning);
-      playTriPoloski()
+      playSpinMusic({})
     }
   }, [isSpacebarPressed]);
 
@@ -154,32 +164,33 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
       // TODO if spin iterator is greater than spin order, we need to have an end animation or something
       setSpinIterator(spinIterator + 1);
       setShowCoverMessage(!showCoverMessage);
-      stopTriPoloski()
+      stopSpinMusic();
     }, false);
   }
 
   return (
-    <>
-      <div className='wheel-container'>
-        <SegmentDetector/>
-        <Transition<undefined> in={isSpinning} timeout={animationDuration} addEndListener={endListener}>
-          {state => (
-            <div className='wheel' style={{
-              ...defaultStyle,
-              // @ts-ignore
-              ...transitionStyles[state]
-            }}>
-              {wheelParts}
-            </div>
-          )}
-        </Transition>
-      </div>
-      <div style={showCoverMessage ? showCoverStyle : hideCoverStyle}>
-        <ShowCover callback={memoizedHideShowCoverCallback}>
-          <div className='comic'>{performerList[spinIterator - 1]}</div>
-          <div className='punishment'>{punishmentList[spinIterator - 1]}</div>
-        </ShowCover>
-      </div>
-    </>
+      <>
+        <Ticker/>
+        <div className='wheel-container'>
+          <SegmentDetector/>
+          <Transition<undefined> in={isSpinning} timeout={animationDuration} addEndListener={endListener}>
+            {state => (
+                <div className='wheel' style={{
+                  ...defaultStyle,
+                  // @ts-ignore
+                  ...transitionStyles[state]
+                }}>
+                  {wheelParts}
+                </div>
+            )}
+          </Transition>
+        </div>
+        <div style={showCoverMessage ? showCoverStyle : hideCoverStyle}>
+          <ShowCover callback={memoizedHideShowCoverCallback}>
+            <div className='comic flow-text'>{performerList[spinIterator - 1]}</div>
+            <div className='punishment flow-text'>{punishmentList[spinIterator - 1]}</div>
+          </ShowCover>
+        </div>
+      </>
   );
 };

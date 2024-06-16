@@ -1,17 +1,16 @@
-.header {
+.show-title {
   text-align: left;
-  font-family: blanka;
-  font-size: 5em;
   color: white;
   filter: drop-shadow(2px 4px 6px black);
-  margin-left: 5%;
+
 }
 
-html {
-  height: 100%;
+.title-image {
   width: 100%;
-  background: black url(./assets/agents_of_chaos_background.svg) no-repeat fixed center;
-  background-size: cover;
+}
+
+body {
+  background: black url(./assets/agents_of_chaos_background.svg) no-repeat fixed center !important;
 }
 
 $red: #F8333C;

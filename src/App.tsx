@@ -20,10 +20,11 @@ const App = () => {
     {value: 'punishment', color: '#AB46D2', isPunishment: true},
   ];
 
-  const [isShowStarted, setIsShowStarted] = useState<boolean>(false);
+  const [isShowStarted, setIsShowStarted] = useState<boolean>(true);
   const defaultStyle: CSSProperties = {
     opacity: '100%',
   };
+
   const hiddenStyle: CSSProperties = {
     opacity: '0%',
     transition: 'ease-in-out 5s'
@@ -41,24 +42,30 @@ const App = () => {
     document.addEventListener("keyup", spaceBarHandler, {once: true});
   }, []);
 
+  window.addEventListener('keydown', function(e) {
+    if(e.keyCode == 32 && e.target == document.body) {
+      e.preventDefault();
+    }
+  });
+
   return (
     <>
       {isShowStarted &&
-        <>
-          <div className='row'>
-            <div className='header col s5' style={{animation: '3s pulse ease-in-out infinite'}}>
-              <div>
-                <img className="show-title" alt="show title" src={titleWithSkull}/>
+          <>
+            <div className='d-flex row min-vh-100'>
+              <div className='show-title col-sm-5' style={{animation: '3s pulse ease-in-out infinite'}}>
+                <div>
+                  <img className="title-image" alt="show title" src={titleWithSkull}/>
+                </div>
+              </div>
+              <div className='col-sm-2 align-content-center'>
+                <div className='d-flex justify-content-center'>
+                  <SpinningWheel wheelValues={wheelValues}/>
+                </div>
+                {/*<div className='flex-circle' style={{marginTop: '-50%'}}/>*/}
               </div>
             </div>
-            <div className='col s2' style={{marginTop: '8%'}}>
-              <div className='valign-wrapper' style={{justifyContent: 'center'}}>
-                <SpinningWheel wheelValues={wheelValues} />
-              </div>
-            </div>
-          </div>
-          <Ticker/>
-        </>
+          </>
       }
       <div style={isShowStarted ? hiddenStyle : defaultStyle}>
         <ShowCover/>

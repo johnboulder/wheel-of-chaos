@@ -1,8 +1,3 @@
 @font-face {
-    font-family: blanka;
     src: url(assets/fonts/propaganda_2.ttf) format("truetype");
-}
-
-.show-title {
-    width: 85%
 }

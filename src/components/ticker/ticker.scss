@@ -1,21 +1,20 @@
 .ticker {
   .circle {
-    filter: drop-shadow(2px 4px 6px black);
     position: absolute;
-    left: 46.1%;
-    top: 41%;
+    left: 50%;
+    top: 50%;
+    filter: drop-shadow(2px 4px 6px black);
     background-color: white;
     height: 10em;
     width: 10em;
     border-radius: 50%;
-    display: inline-block;
     z-index: -1;
   }
-  .triangle {
-    filter: drop-shadow(2px 4px 6px black);
+
+  .tick-pointer {
     position: absolute;
-    top: 39.8%;
-    left: 49.2%;
+    left: 50%;
+    top: 40%;
     width: 0;
     height: 0;
     border-left: 1em solid transparent;

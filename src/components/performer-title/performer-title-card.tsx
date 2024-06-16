@@ -14,12 +14,12 @@ export const PerformerTitleCard: React.FC<TitleCardProps> = (props) => {
     <>
       <div className='container'>
         <div className='row'>
-          <div className='col s12 title-card'>
+          <div className='col-sm-12 title-card'>
             {titleText}
           </div>
         </div>
       </div>
-      <div className='vr-lady'>
+      <div className='head-image'>
         <img src={vrLady}/>
       </div>
     </>
