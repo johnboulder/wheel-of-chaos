@@ -168,6 +168,12 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     }, false);
   }
 
+  const [fontSize, setFontSize] = useState<number>(16);
+  const increaseFontSize = () => setFontSize((prev) => prev + 2);
+  const decreaseFontSize = () => setFontSize((prev) => prev - 2);
+
+  const [] = useState<string>();
+
   return (
       <>
         <Ticker/>
@@ -187,9 +193,23 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
         </div>
         <div style={showCoverMessage ? showCoverStyle : hideCoverStyle}>
           <ShowCover callback={memoizedHideShowCoverCallback}>
-            <div className='comic flow-text'>{performerList[spinIterator - 1]}</div>
-            <div className='punishment flow-text'>{punishmentList[spinIterator - 1]}</div>
+            <div
+                className='comic flow-text'
+                style={{fontSize: `${fontSize}vmax`}}
+            >
+              {performerList[spinIterator - 1]}
+            </div>
+            <div
+                className='punishment flow-text'
+                style={{fontSize: `${fontSize}vmax`}}
+            >
+              {punishmentList[spinIterator - 1]}
+            </div>
           </ShowCover>
+          <div className='title'>
+            <button onClick={increaseFontSize}>Increase Font Size</button>
+            <button onClick={decreaseFontSize}>Decrease Font Size</button>
+          </div>
         </div>
       </>
   );

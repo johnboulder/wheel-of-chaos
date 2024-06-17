@@ -1,4 +1,4 @@
-import React, {CSSProperties, useEffect, useState} from 'react'
+import React, {CSSProperties, useEffect, useRef, useState} from 'react'
 
 import {Part, SpinningWheel} from "./components/spinning-wheel/spinning-wheel";
 
@@ -20,7 +20,7 @@ const App = () => {
     {value: 'punishment', color: '#AB46D2', isPunishment: true},
   ];
 
-  const [isShowStarted, setIsShowStarted] = useState<boolean>(true);
+  const [isShowStarted, setIsShowStarted] = useState<boolean>(false);
   const defaultStyle: CSSProperties = {
     opacity: '100%',
   };
@@ -42,6 +42,7 @@ const App = () => {
     document.addEventListener("keyup", spaceBarHandler, {once: true});
   }, []);
 
+  // Disables spacebar from scrolling down the page when pressed
   window.addEventListener('keydown', function(e) {
     if(e.keyCode == 32 && e.target == document.body) {
       e.preventDefault();
