@@ -21,26 +21,33 @@ import {SegmentDetector} from "./segment-detector";
 import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
 import useSound from "use-sound";
 import {Ticker} from "../ticker/ticker";
+import {useMeasure, useWindowSize} from "react-use";
 
 const performerList: string[] = [
-  'Jonah Eggleston',
-  'Adam de La Fuente',
-  'Elaine Golden',
-  'Gena Gephart',
-  'Sam Biru',
-  'Cameron Gillette',
+  'Joey Bednarski',
+  'Sonal Aggarwal',
+  'Jonathan Dunne and Bill Gevirtz',
+  'Kerry Stevens',
+  'Greg Kennedy',
+  'Chris Higgins',
+  'Queeny Chandler',
+  'Bill Gevirtz',
 ];
 
 const punishmentList: string[] = [
-  'Blind, Deaf, Smart!',
-  'SHOTS! SHOTS! SHOTS!',
-  'Jumbotron!',
-  'My Cousin Joey!',
-  'Jack Bauer!',
+  'Say it Again!',
+  'A Silly Costume!',
+  'The Race!',
+  'Severe Thunderstorm Warning!',
   'The Female Experience!',
+  'The Future of Comedy!',
+  'My Cousin Joey!',
+  'The Execution!',
 ];
 
 const spinOrder: string[] = [
+  'punishment',
+  'punishment',
   'punishment',
   'punishment',
   'punishment',
@@ -60,12 +67,12 @@ const spinOrder: string[] = [
 
 const showCoverStyle: CSSProperties = {
   opacity: '100%',
-  transition: 'ease-in-out 5s'
+  transition: 'ease-in-out 2s'
 };
 
 const hideCoverStyle: CSSProperties = {
   opacity: '0%',
-  transition: 'ease-in-out 5s'
+  transition: 'ease-in-out 2s'
 };
 
 export interface Part {
@@ -168,11 +175,27 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     }, false);
   }
 
-  const [fontSize, setFontSize] = useState<number>(16);
-  const increaseFontSize = () => setFontSize((prev) => prev + 2);
-  const decreaseFontSize = () => setFontSize((prev) => prev - 2);
+  const [fontSize, setFontSize] = useState<number>(8);
+  const [ref, bounds] = useMeasure();
+  const {width: windowWidth, height: windowHeight} = useWindowSize();
+  const increaseFontSize = () => setFontSize((prev) => prev + 1);
+  const decreaseFontSize = () => setFontSize((prev) => prev - 1);
 
-  const [] = useState<string>();
+  useEffect(() => {
+
+    const THREE_QUARTERS = 3/4;
+    const windowPercentage = bounds.width/windowWidth;
+
+    if(showCoverMessage && isFinite(bounds.width) && bounds.width > windowWidth) {
+      decreaseFontSize();
+    }
+
+    if(showCoverMessage && isFinite(windowPercentage) && windowPercentage < THREE_QUARTERS) {
+      increaseFontSize();
+    }
+
+
+  }, [bounds.width, windowWidth, windowHeight]);
 
   return (
       <>
@@ -195,6 +218,8 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
           <ShowCover callback={memoizedHideShowCoverCallback}>
             <div
                 className='comic flow-text'
+                //@ts-ignore
+                ref={ref}
                 style={{fontSize: `${fontSize}vmax`}}
             >
               {performerList[spinIterator - 1]}
@@ -206,10 +231,6 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
               {punishmentList[spinIterator - 1]}
             </div>
           </ShowCover>
-          <div className='title'>
-            <button onClick={increaseFontSize}>Increase Font Size</button>
-            <button onClick={decreaseFontSize}>Decrease Font Size</button>
-          </div>
         </div>
       </>
   );

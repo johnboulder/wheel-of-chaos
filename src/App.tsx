@@ -3,7 +3,6 @@ import React, {CSSProperties, useEffect, useRef, useState} from 'react'
 import {Part, SpinningWheel} from "./components/spinning-wheel/spinning-wheel";
 
 import './app.scss';
-import {Ticker} from "./components/ticker/ticker";
 import {ShowCover} from "./components/show-cover/show-cover";
 import titleWithSkull from './assets/title_with_skull.png';
 
@@ -12,6 +11,8 @@ import titleWithSkull from './assets/title_with_skull.png';
 const App = () => {
 
   const wheelValues: Part[] = [
+    {value: 'punishment', color: '#FCF69C', isPunishment: true},
+    {value: 'punishment', color: '#55D8C1', isPunishment: true},
     {value: 'punishment', color: '#F8333C', isPunishment: true},
     {value: 'punishment', color: '#EFCEFA', isPunishment: true},
     {value: 'punishment', color: '#FF6FB5', isPunishment: true},
@@ -27,7 +28,7 @@ const App = () => {
 
   const hiddenStyle: CSSProperties = {
     opacity: '0%',
-    transition: 'ease-in-out 5s'
+    transition: 'ease-in-out 2s'
   };
 
   const spaceBarHandler = (event: KeyboardEvent) => {
