@@ -175,27 +175,40 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     }, false);
   }
 
-  const [fontSize, setFontSize] = useState<number>(8);
-  const [ref, bounds] = useMeasure();
+  const [comicFontSize, setComicFontSize] = useState<number>(8);
+  const [punishmentFontSize, setPunishmentFontSize] = useState<number>(8);
+  const [comicRef, comicBounds] = useMeasure();
+  const [punishmentRef, punishmentBounds] = useMeasure();
   const {width: windowWidth, height: windowHeight} = useWindowSize();
-  const increaseFontSize = () => setFontSize((prev) => prev + 1);
-  const decreaseFontSize = () => setFontSize((prev) => prev - 1);
+  const increaseComicFontSize = () => setComicFontSize((prev) => prev + 1);
+  const decreaseComicFontSize = () => setComicFontSize((prev) => prev - 1);
+  const increasePunishmentFontSize = () => setPunishmentFontSize((prev) => prev + 1);
+  const decreasePunishmentFontSize = () => setPunishmentFontSize((prev) => prev - 1);
 
   useEffect(() => {
 
     const THREE_QUARTERS = 3/4;
-    const windowPercentage = bounds.width/windowWidth;
+    const comicPercentage = comicBounds.width/windowWidth;
+    const punishmentPercentage = punishmentBounds.width/windowWidth;
 
-    if(showCoverMessage && isFinite(bounds.width) && bounds.width > windowWidth) {
-      decreaseFontSize();
+    if(showCoverMessage && isFinite(comicBounds.width) && comicBounds.width > windowWidth) {
+      decreaseComicFontSize();
     }
 
-    if(showCoverMessage && isFinite(windowPercentage) && windowPercentage < THREE_QUARTERS) {
-      increaseFontSize();
+    if(showCoverMessage && isFinite(comicPercentage) && comicPercentage < THREE_QUARTERS) {
+      increaseComicFontSize();
+    }
+
+    if(showCoverMessage && isFinite(punishmentBounds.width) && punishmentBounds.width > windowWidth) {
+      decreasePunishmentFontSize();
+    }
+
+    if(showCoverMessage && isFinite(punishmentPercentage) && punishmentPercentage < THREE_QUARTERS) {
+      increasePunishmentFontSize();
     }
 
 
-  }, [bounds.width, windowWidth, windowHeight]);
+  }, [comicBounds.width, punishmentBounds.width, windowWidth, windowHeight]);
 
   return (
       <>
@@ -219,14 +232,16 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
             <div
                 className='comic flow-text'
                 //@ts-ignore
-                ref={ref}
-                style={{fontSize: `${fontSize}vmax`}}
+                ref={comicRef}
+                style={{fontSize: `${comicFontSize}vmax`}}
             >
               {performerList[spinIterator - 1]}
             </div>
             <div
                 className='punishment flow-text'
-                style={{fontSize: `${fontSize}vmax`}}
+                //@ts-ignore
+                ref={punishmentRef}
+                style={{fontSize: `${punishmentFontSize}vmax`}}
             >
               {punishmentList[spinIterator - 1]}
             </div>
