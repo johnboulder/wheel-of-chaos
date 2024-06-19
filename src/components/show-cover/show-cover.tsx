@@ -1,7 +1,6 @@
 import React, {HTMLProps, useEffect} from "react";
 import './show-cover.scss'
 import {usePressObserver} from "../../utils/use-press-observer";
-import titleWithSkull from "../../assets/title_with_skull.png";
 import skull from "../../assets/skull.png";
 
 export interface ShowCoverProps extends HTMLProps<any> {
