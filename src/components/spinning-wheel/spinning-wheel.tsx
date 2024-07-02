@@ -11,6 +11,7 @@ import {
   getTransformOrigin,
   getWidthAndHeight
 } from "./wheel-utils";
+import { useCookies } from 'react-cookie';
 import {Transition} from "react-transition-group";
 import {useTransitionStyle} from "./use-transition-style";
 import skullIcon from '../../assets/skull.png';
@@ -22,47 +23,17 @@ import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
 import useSound from "use-sound";
 import {Ticker} from "../ticker/ticker";
 import {useMeasure, useWindowSize} from "react-use";
-
-const performerList: string[] = [
-  'Joey Bednarski',
-  'Sonal Aggarwal',
-  'Jonathan Dunne and Bill Gevirtz',
-  'Kerry Stevens',
-  'Greg Kennedy',
-  'Chris Higgins',
-  'Queeny Chandler',
-  'Bill Gevirtz',
-];
-
-const punishmentList: string[] = [
-  'Say it Again!',
-  'A Silly Costume!',
-  'The Race!',
-  'Severe Thunderstorm Warning!',
-  'The Female Experience!',
-  'The Future of Comedy!',
-  'My Cousin Joey!',
-  'The Execution!',
-];
-
-const spinOrder: string[] = [
-  'punishment',
-  'punishment',
-  'punishment',
-  'punishment',
-  'punishment',
-  'punishment',
-  'punishment',
-  'punishment',
-];
+import {SHOW_SETTINGS} from '../../utils/cookie-utils';
 
 /**
  * TODO
- * - Shorten spin time
- * - Shorten music
+ * - Read spinOrder, punishmentList, and performerList from local memory or from cookies
+ *  - Initialize the cookie when you land on the site
+ *  - Update the cookie when you make edits to the show form
+ *  - Read the cookie when the page loads
+ *
  * - Update background with spinner image
  * - Configure names and titles to appear within the window for any name length
- * - Disable spacebar scrolling
  */
 
 const showCoverStyle: CSSProperties = {
@@ -87,6 +58,10 @@ export interface WheelProps {
 
 export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   const {wheelValues} = props;
+
+  const [cookies, setCookie, removeCookie] = useCookies([SHOW_SETTINGS]);
+
+  const {performerList, punishmentList, spinOrder} = cookies[SHOW_SETTINGS];
 
   const segmentSize = getSegmentSize(wheelValues.length);
   const [width, height] = getWidthAndHeight(wheelValues.length);

@@ -1,10 +1,12 @@
-import React, {CSSProperties, useEffect, useRef, useState} from 'react'
+import React, {CSSProperties, useEffect, useState} from 'react'
 
 import {Part, SpinningWheel} from "./components/spinning-wheel/spinning-wheel";
 
 import './app.scss';
 import {ShowCover} from "./components/show-cover/show-cover";
 import titleWithSkull from './assets/title_with_skull.png';
+import {useCookies} from 'react-cookie';
+import {DEFAULT_SETTINGS, SHOW_SETTINGS} from './utils/cookie-utils';
 
 // TODO move button into this container
 
@@ -20,6 +22,12 @@ const App = () => {
     {value: 'punishment', color: '#55D8C1', isPunishment: true},
     {value: 'punishment', color: '#AB46D2', isPunishment: true},
   ];
+
+  const [cookies, setCookie, removeCookie] = useCookies([SHOW_SETTINGS]);
+
+  if(!cookies[SHOW_SETTINGS]) {
+    setCookie(SHOW_SETTINGS, DEFAULT_SETTINGS);
+  }
 
   const [isShowStarted, setIsShowStarted] = useState<boolean>(false);
   const defaultStyle: CSSProperties = {
@@ -53,21 +61,21 @@ const App = () => {
   return (
     <>
       {isShowStarted &&
-          <>
-            <div className='d-flex row min-vh-100'>
-              <div className='show-title col-sm-5' style={{animation: '3s pulse ease-in-out infinite'}}>
-                <div>
-                  <img className="title-image" alt="show title" src={titleWithSkull}/>
-                </div>
-              </div>
-              <div className='col-sm-2 align-content-center'>
-                <div className='d-flex justify-content-center'>
-                  <SpinningWheel wheelValues={wheelValues}/>
-                </div>
-                {/*<div className='flex-circle' style={{marginTop: '-50%'}}/>*/}
+        <>
+          <div className='d-flex row min-vh-100'>
+            <div className='show-title col-sm-5' style={{animation: '3s pulse ease-in-out infinite'}}>
+              <div>
+                <img className="title-image" alt="show title" src={titleWithSkull}/>
               </div>
             </div>
-          </>
+            <div className='col-sm-2 align-content-center'>
+              <div className='d-flex justify-content-center'>
+                <SpinningWheel wheelValues={wheelValues}/>
+              </div>
+              {/*<div className='flex-circle' style={{marginTop: '-50%'}}/>*/}
+            </div>
+          </div>
+        </>
       }
       <div style={isShowStarted ? hiddenStyle : defaultStyle}>
         <ShowCover/>
