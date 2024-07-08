@@ -27,13 +27,20 @@ import {SHOW_SETTINGS} from '../../utils/cookie-utils';
 
 /**
  * TODO
- * - Read spinOrder, punishmentList, and performerList from local memory or from cookies
- *  - Initialize the cookie when you land on the site
- *  - Update the cookie when you make edits to the show form
- *  - Read the cookie when the page loads
+ * - Show Flow
+ *  - Add forward button
+ *  - Save current state of show in cookies, and load it when the site opens (this will allow us to change a performer name mid show)
+ *  - Add backward button
+ *  - Update punishment page so we don't have to navigate away from the app to administer punishments
  *
- * - Update background with spinner image
- * - Configure names and titles to appear within the window for any name length
+ * - Settings Form
+ *  - Add "Reset to Defaults" button
+ *  - Add preconfigured punishments
+ *
+ * - Look and feel
+ *  - Change wheel segment creation logic so the same color never appears next to each other
+ *  - Update background with spinner image?
+ *  - Show skull when show ends
  */
 
 const showCoverStyle: CSSProperties = {
