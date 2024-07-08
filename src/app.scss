@@ -10,6 +10,8 @@
 
 body {
   background: black url(./assets/agents_of_chaos_background.svg) no-repeat fixed center !important;
+  height: 100%;
+  overflow-y: hidden;
 }
 
 $red: #F8333C;

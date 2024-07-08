@@ -1,0 +1,35 @@
+
+@import "../../../node_modules/bootstrap/scss/functions";
+
+$offcanvas-horizontal-width: 700px;
+
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+
+
+@import "../../../node_modules/bootstrap";
+
+.settings-btn {
+  position: absolute;
+  transform: translate(50%, 94%);
+  left: 94%;
+  bottom: 99%;
+  z-index: 9999;
+  filter: drop-shadow(2px 4px 6px black);
+
+  --bs-btn-color: transparent;
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: transparent;
+  --bs-btn-border-radius: .5rem;
+  --bs-btn-hover-color: transparent;
+  --bs-btn-hover-bg: #{shade-color(transparent, 10%)};
+  --bs-btn-hover-border-color: #{shade-color(transparent, 10%)};
+  --bs-btn-focus-shadow-rgb: transparent;
+  --bs-btn-active-color: transparent;
+  --bs-btn-active-bg: #{shade-color(transparent, 20%)};
+  --bs-btn-active-border-color: #{shade-color(transparent, 20%)};
+}
+
+.settings-offcanvas {
+  --bs-offcanvas-width: 75%;
+}
