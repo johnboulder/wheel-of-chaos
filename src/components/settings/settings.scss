@@ -1,22 +1,13 @@
 
 @import "../../../node_modules/bootstrap/scss/functions";
 
-$offcanvas-horizontal-width: 700px;
-
 @import "../../../node_modules/bootstrap/scss/variables";
 @import "../../../node_modules/bootstrap/scss/mixins";
 
 
 @import "../../../node_modules/bootstrap";
 
-.settings-btn {
-  position: absolute;
-  transform: translate(50%, 94%);
-  left: 94%;
-  bottom: 99%;
-  z-index: 9999;
-  filter: drop-shadow(2px 4px 6px black);
-
+.icon-btn {
   --bs-btn-color: transparent;
   --bs-btn-bg: transparent;
   --bs-btn-border-color: transparent;
@@ -28,6 +19,18 @@ $offcanvas-horizontal-width: 700px;
   --bs-btn-active-color: transparent;
   --bs-btn-active-bg: #{shade-color(transparent, 20%)};
   --bs-btn-active-border-color: #{shade-color(transparent, 20%)};
+  filter: drop-shadow(2px 4px 6px black);
+}
+
+.floating-btn {
+  position: absolute;
+  z-index: 9999;
+}
+
+.settings-btn {
+  transform: translate(50%, 94%);
+  left: 94%;
+  bottom: 99%;
 }
 
 .settings-offcanvas {

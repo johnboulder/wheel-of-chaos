@@ -1,13 +1,12 @@
 import React, {useState, createContext, useContext} from 'react';
 import {BsGearFill} from 'react-icons/bs';
 import './settings.scss';
-import {IconContext} from 'react-icons';
 import {Accordion, Button, Col, Form, InputGroup, Offcanvas, Row} from 'react-bootstrap';
-import {useCookies} from 'react-cookie';
 import {ShowSettingsContext} from '../../App';
 import {ShowSettings} from '../../utils/cookie-utils';
 import {Part} from '../spinning-wheel/spinning-wheel';
 import {getWheelValues} from './settings-utils';
+import IconButton from '../icon-button';
 
 const getSpinOrder = (performerCount: number): string[] => {
   const spinOrder: string[] = [];
@@ -114,24 +113,9 @@ const Settings = () => {
 
   return (
     <>
-      <button type='button' className='btn settings-btn' onClick={handleShow}>
-        <IconContext.Provider
-          value={{
-            color:'transparent',
-            size: '50px',
-            style: {
-              stroke: 'white',
-              strokeOpacity: '50%',
-              strokeWidth: '0.5px',
-              overflow: 'visible',
-            }
-          }}
-        >
-          <div>
-            <BsGearFill/>
-          </div>
-        </IconContext.Provider>
-      </button>
+      <IconButton onClick={handleShow} className='settings-btn'>
+        <BsGearFill/>
+      </IconButton>
 
       <Offcanvas
         className="w-75"

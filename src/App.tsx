@@ -13,6 +13,8 @@ import {
   ShowSettingsContextType
 } from './utils/cookie-utils';
 import Settings from './components/settings/settings';
+import IconButton from './components/icon-button';
+import {BsArrowRightSquare, BsArrowRightSquareFill} from 'react-icons/bs';
 
 export const ShowSettingsContext = createContext<ShowSettingsContextType>(DEFAULT_SHOW_SETTINGS_CONTEXT);
 
@@ -95,6 +97,9 @@ const App = () => {
         </div>
         <Settings/>
       </div>
+      <IconButton className='forward-btn'>
+        <BsArrowRightSquareFill/>
+      </IconButton>
     </ShowSettingsContext.Provider>
   )
 }
