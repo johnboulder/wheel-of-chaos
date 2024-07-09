@@ -28,7 +28,6 @@ import {NextButtonContext, ShowSettingsContext} from '../../App';
 /**
  * TODO
  * - Show Flow
- *  - Add forward button
  *  - Save current state of show in cookies, and load it when the site opens (this will allow us to change a performer name mid show)
  *  - Add backward button
  *  - Update punishment page so we don't have to navigate away from the app to administer punishments
@@ -38,6 +37,8 @@ import {NextButtonContext, ShowSettingsContext} from '../../App';
  *  - Add preconfigured punishments
  *
  * - Look and feel
+ *  - Change wheel spinning logic so we only land on segments we haven't landed on yet
+ *  - Add purple to wheel segment colors
  *  - Change wheel segment creation logic so the same color never appears next to each other
  *  - Update background with spinner image?
  *  - Show skull when show ends
