@@ -7,17 +7,11 @@ export interface ShowCoverProps extends HTMLProps<any> {
   callback?: () => void;
 }
 
-export const ShowCover: React.FC<ShowCoverProps> = (props) => {
-  const {children, callback, className} = props;
-
-  const [isBackspacePressed, setIsBackspacePressed] = usePressObserver("backspace");
-
-  useEffect(() => {
-    if(isBackspacePressed && callback) {
-      callback();
-      setIsBackspacePressed(false);
-    }
-  }, [isBackspacePressed]);
+export const ShowCover: React.FC<HTMLProps<any>> = (props) => {
+  const {
+    children,
+    className
+  } = props;
 
   return (
     <div {...props} className={`${className} show-cover-container`}>

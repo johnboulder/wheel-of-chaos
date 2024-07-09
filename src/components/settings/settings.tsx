@@ -1,4 +1,4 @@
-import React, {useState, createContext, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {BsGearFill} from 'react-icons/bs';
 import './settings.scss';
 import {Accordion, Button, Col, Form, InputGroup, Offcanvas, Row} from 'react-bootstrap';

@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useEffect, useState} from "react"
+import React, {CSSProperties, useCallback, useContext, useEffect, useState} from "react"
 import './spinning-wheel.scss';
 import {
   detectSegmentIntersection,
@@ -17,13 +17,13 @@ import {useTransitionStyle} from "./use-transition-style";
 import skullIcon from '../../assets/skull.png';
 import laughingIcon from '../../assets/laughing-icon.svg';
 import {ShowCover} from "../show-cover/show-cover";
-import {usePressObserver} from "../../utils/use-press-observer";
 import {SegmentDetector} from "./segment-detector";
 import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
 import useSound from "use-sound";
 import {Ticker} from "../ticker/ticker";
 import {useMeasure, useWindowSize} from "react-use";
 import {SHOW_SETTINGS} from '../../utils/cookie-utils';
+import {NextButtonContext, ShowSettingsContext} from '../../App';
 
 /**
  * TODO
@@ -64,11 +64,8 @@ export interface WheelProps {
 }
 
 export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
-  const {wheelValues} = props;
-
-  const [cookies, setCookie, removeCookie] = useCookies([SHOW_SETTINGS]);
-
-  const {performerList, punishmentList, spinOrder} = cookies[SHOW_SETTINGS];
+  const {wheelValues, performerList, punishmentList, spinOrder} = useContext(ShowSettingsContext);
+  const {isWheelSpinRequested, showCoverMessage, setIsWheelSpinRequested, setShowCoverMessage} = useContext(NextButtonContext);
 
   const segmentSize = getSegmentSize(wheelValues.length);
   const [width, height] = getWidthAndHeight(wheelValues.length);
@@ -118,28 +115,17 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
 
   const [transitionStyles, setTransitionStyles] = useTransitionStyle(nextAnimationDegrees);
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
-  const [showCoverMessage, setShowCoverMessage] = useState<boolean>(false);
   const [playSpinMusic, { stop: stopSpinMusic }] = useSound(triPoloskiMusic);
-  const [isSpacebarPressed, setIsSpacebarPressed] = usePressObserver("space");
-
-  const hideShowCoverCallback = () => {
-    if(showCoverMessage) {
-      setShowCoverMessage(!showCoverMessage);
-      setIsSpacebarPressed(false);
-    }
-  };
-
-  const memoizedHideShowCoverCallback = useCallback(hideShowCoverCallback, [showCoverMessage]);
 
   useEffect(() => {
-    if (isSpacebarPressed) {
+    if (isWheelSpinRequested) {
       const nextSpinSegment = getNextSpinSegment(segmentSearchInfo, spinOrder[spinIterator]);
       const updatedNextAnimationDegrees = getRotationDegreesOfNextSegment(nextAnimationDegrees, nextSpinSegment);
       setNextAnimationDegrees(updatedNextAnimationDegrees);
       setIsSpinning(!isSpinning);
       playSpinMusic({})
     }
-  }, [isSpacebarPressed]);
+  }, [isWheelSpinRequested]);
 
   useEffect(() => {
     console.log(`Next Animation Degrees: ${nextAnimationDegrees}`);
@@ -210,7 +196,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
           </Transition>
         </div>
         <div style={showCoverMessage ? showCoverStyle : hideCoverStyle}>
-          <ShowCover callback={memoizedHideShowCoverCallback}>
+          <ShowCover>
             <div
                 className='comic flow-text'
                 //@ts-ignore
