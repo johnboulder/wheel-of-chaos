@@ -16,7 +16,7 @@ jobs:
        run: echo NVMRC=`cat .nvmrc` >> $GITHUB_ENV
        shell: bash
      - name: Setup node ${{ env.NVMRC }}
-       uses: actions/setup-node@v3
+       uses: actions/setup-node@v4
        with:
         node-version: ${{ env.NVMRC }}
      - name: Install dependencies
@@ -24,6 +24,8 @@ jobs:
        shell: bash
      - name: Build
        run: npm run build
+     - name: Setup Pages
+       uses: actions/configure-pages@v4
      - name: Upload artifact
        uses: actions/upload-artifact@v4
        with:
