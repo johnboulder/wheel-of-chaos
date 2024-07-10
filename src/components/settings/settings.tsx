@@ -48,7 +48,7 @@ const getTextInputRowsToRender = (list: string[], placeHolderText: string, perfo
 const Settings = () => {
   const showSettings = useContext(ShowSettingsContext);
 
-  const {performerCount, performerList, punishmentList, spinOrder, setShowSettings, wheelValues} = showSettings;
+  const {performerCount, performerList, punishmentList, setShowSettings, wheelValues} = showSettings;
 
   const [menuPerformerCount, setMenuPerformerCount] = useState<number>(performerCount);
   const [menuPerformerList, setMenuPerformerList] = useState<string[]>(performerList);

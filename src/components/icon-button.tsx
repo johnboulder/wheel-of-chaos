@@ -1,6 +1,5 @@
-import {IconContext, IconType} from 'react-icons';
+import {IconContext} from 'react-icons';
 import React, {HTMLProps} from 'react';
-import {BsGearFill} from 'react-icons/bs';
 
 interface IconButtonProps extends HTMLProps<any>{}
 

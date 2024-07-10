@@ -1,6 +1,6 @@
-import React, {createContext, CSSProperties, useCallback, useEffect, useRef, useState} from 'react'
+import React, {createContext, CSSProperties, useRef, useState} from 'react'
 
-import {Part, SpinningWheel} from "./components/spinning-wheel/spinning-wheel";
+import {SpinningWheel} from "./components/spinning-wheel/spinning-wheel";
 import './app.scss';
 import {ShowCover} from "./components/show-cover/show-cover";
 import titleWithSkull from './assets/title_with_skull.png';
@@ -14,7 +14,7 @@ import {
 } from './utils/cookie-utils';
 import Settings from './components/settings/settings';
 import IconButton from './components/icon-button';
-import {BsArrowRightSquare, BsArrowRightSquareFill} from 'react-icons/bs';
+import {BsArrowRightSquareFill} from 'react-icons/bs';
 
 export const ShowSettingsContext = createContext<ShowSettingsContextType>(DEFAULT_SHOW_SETTINGS_CONTEXT);
 
@@ -82,7 +82,7 @@ const App = () => {
 
   // Disables spacebar from scrolling down the page when pressed
   window.addEventListener('keydown', function(e) {
-    if(e.keyCode == 32 && e.target == document.body) {
+    if(e.keyCode === 32 && e.target === document.body) {
       e.preventDefault();
     }
   });
