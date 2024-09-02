@@ -38,11 +38,13 @@ export const NextButtonContext = createContext<NextButton>({
 })
 
 const App = () => {
+  const today = new Date();
+  const tenYearsFromNow = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
 
   const [cookies, setCookie] = useCookies([SHOW_SETTINGS]);
 
   if(!cookies[SHOW_SETTINGS]) {
-    setCookie(SHOW_SETTINGS, DEFAULT_SETTINGS);
+    setCookie(SHOW_SETTINGS, DEFAULT_SETTINGS, {expires: tenYearsFromNow});
   }
 
   const showSettings: ShowSettings = cookies[SHOW_SETTINGS];
@@ -50,7 +52,7 @@ const App = () => {
   const {wheelValues, performerCount, performerList, punishmentList, spinOrder} = showSettingsContextState;
 
   const handleShowSettingsUpdate = (updatedShowSettings: ShowSettings) => {
-    setCookie(SHOW_SETTINGS, updatedShowSettings);
+    setCookie(SHOW_SETTINGS, updatedShowSettings, {expires: tenYearsFromNow});
     setShowSettingsContextState(updatedShowSettings);
   };
 
