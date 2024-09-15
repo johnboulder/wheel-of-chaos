@@ -11,7 +11,6 @@ import {
   getTransformOrigin,
   getWidthAndHeight
 } from "./wheel-utils";
-import { useCookies } from 'react-cookie';
 import {Transition} from "react-transition-group";
 import {useTransitionStyle} from "./use-transition-style";
 import skullIcon from '../../assets/skull.png';
@@ -22,26 +21,25 @@ import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
 import useSound from "use-sound";
 import {Ticker} from "../ticker/ticker";
 import {useMeasure, useWindowSize} from "react-use";
-import {SHOW_SETTINGS} from '../../utils/cookie-utils';
 import {NextButtonContext, ShowSettingsContext} from '../../App';
 
 /**
  * TODO
- * - Show Flow
- *  - Save current state of show in cookies, and load it when the site opens (this will allow us to change a performer name mid show)
- *  - Add backward button
- *  - Update punishment page so we don't have to navigate away from the app to administer punishments
+ *  - Show Flow
+ *   - Add backward button
+ *  - Settings Form
+ *   - Add "Reset to Defaults" button
+ *   - Add preconfigured punishments
+ *  - Look and feel
+ *   - Change wheel spinning logic so we only land on segments we haven't landed on yet
+ *   - Add purple to wheel segment colors
+ *   - Change wheel segment creation logic so the same color never appears next to each other
+ *   - Update background with spinner image?
+ *   - Show skull when show ends
  *
- * - Settings Form
- *  - Add "Reset to Defaults" button
- *  - Add preconfigured punishments
- *
- * - Look and feel
- *  - Change wheel spinning logic so we only land on segments we haven't landed on yet
- *  - Add purple to wheel segment colors
- *  - Change wheel segment creation logic so the same color never appears next to each other
- *  - Update background with spinner image?
- *  - Show skull when show ends
+ *  - Comedian name should appear somewhere before the wheel or the punishment are chosen.
+ *    - Flow order: Comedian name -> Wheel + Comedian Name -> Punishment -> Punishment + Comedian Name
+ *  - Add ability to return to previous state of show
  */
 
 const showCoverStyle: CSSProperties = {

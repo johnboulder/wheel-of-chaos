@@ -3,10 +3,10 @@ import {BsGearFill} from 'react-icons/bs';
 import './settings.scss';
 import {Accordion, Button, Col, Form, InputGroup, Offcanvas, Row} from 'react-bootstrap';
 import {ShowSettingsContext} from '../../App';
-import {ShowSettings} from '../../utils/cookie-utils';
 import {Part} from '../spinning-wheel/spinning-wheel';
 import {getWheelValues} from './settings-utils';
 import IconButton from '../icon-button';
+import {ShowSettings} from '../../models/show-settings';
 
 const getSpinOrder = (performerCount: number): string[] => {
   const spinOrder: string[] = [];

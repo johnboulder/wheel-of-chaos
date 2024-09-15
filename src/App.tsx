@@ -9,24 +9,14 @@ import {
   DEFAULT_SETTINGS,
   DEFAULT_SHOW_SETTINGS_CONTEXT,
   SHOW_SETTINGS,
-  ShowSettings,
-  ShowSettingsContextType
 } from './utils/cookie-utils';
 import Settings from './components/settings/settings';
 import IconButton from './components/icon-button';
 import {BsArrowRightSquareFill} from 'react-icons/bs';
+import {NextButton} from './models/next-button';
+import {ShowSettings, ShowSettingsContextType} from './models/show-settings';
 
 export const ShowSettingsContext = createContext<ShowSettingsContextType>(DEFAULT_SHOW_SETTINGS_CONTEXT);
-
-
-export interface NextButton {
-  isWheelSpinRequested: boolean;
-  isShowStarted: boolean;
-  showCoverMessage: boolean;
-  handleNextButtonClick: () => void;
-  setIsWheelSpinRequested: (value: boolean) => void;
-  setShowCoverMessage: (value: boolean) => void;
-}
 
 export const NextButtonContext = createContext<NextButton>({
   isWheelSpinRequested: false,
