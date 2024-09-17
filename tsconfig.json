@@ -4,7 +4,7 @@
       "node_modules/@types",
       "custom_typings/"
     ],
-    "target": "es5",
+    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",

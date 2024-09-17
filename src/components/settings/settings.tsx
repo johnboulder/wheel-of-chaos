@@ -6,7 +6,7 @@ import {ShowSettingsContext} from '../../App';
 import {Part} from '../spinning-wheel/spinning-wheel';
 import {getWheelValues} from './settings-utils';
 import IconButton from '../icon-button';
-import {ShowSettings} from '../../models/show-settings';
+import {PunishmentOrderOption, PunishmentOrderOptionMessages, ShowSettings} from '../../models/show-settings';
 
 const getSpinOrder = (performerCount: number): string[] => {
   const spinOrder: string[] = [];
@@ -23,6 +23,39 @@ const getPerformerNameTextInputRows = (list: string[], performerCount: number, o
 
 const getPunishmentNameTextInputRows = (list: string[], performerCount: number, onChangeCallback: (event: React.ChangeEvent<HTMLInputElement>, index: number) => void) => {
   return getTextInputRowsToRender(list, "Punishment Name", performerCount, onChangeCallback);
+};
+
+const getPunishmentOrderInputRows = (list: string[], performerCount: number, onChangeCallback: (event: React.ChangeEvent<HTMLSelectElement>, index: number) => void) => {
+  return getSelectInputRowsToRender(list, PunishmentOrderOptionMessages, performerCount, onChangeCallback);
+};
+
+const getSelectInputRowsToRender = (
+  list: string[],
+  selectOptions: Map<string, string>,
+  performerCount: number,
+  onChangeCallback: (event: React.ChangeEvent<HTMLSelectElement>, index: number) => void
+) => {
+  while(performerCount > list.length) {
+    list.push("");
+  }
+  return list.slice(0, performerCount).map((punishmentOrderOption, index) => (
+    <InputGroup>
+      <InputGroup.Text>#{index + 1}</InputGroup.Text>
+      <Form.Select
+        id={'punishment_ordering' + '_' + index}
+        key={index}
+        required
+        defaultValue={punishmentOrderOption}
+        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {onChangeCallback(event, index)}}
+      >
+        {
+          Array.from(selectOptions.keys().map((key) => (
+            <option value={key}>{selectOptions.get(key)}</option>
+          )))
+        }
+      </Form.Select>
+    </InputGroup>
+  ))
 };
 
 const getTextInputRowsToRender = (list: string[], placeHolderText: string, performerCount: number, onChangeCallback: (event: React.ChangeEvent<HTMLInputElement>, index: number) => void) => {
@@ -48,11 +81,19 @@ const getTextInputRowsToRender = (list: string[], placeHolderText: string, perfo
 const Settings = () => {
   const showSettings = useContext(ShowSettingsContext);
 
-  const {performerCount, performerList, punishmentList, setShowSettings, wheelValues} = showSettings;
+  const {
+    performerCount,
+    performerList,
+    punishmentList,
+    punishmentOrderList,
+    setShowSettings,
+    wheelValues
+  } = showSettings;
 
   const [menuPerformerCount, setMenuPerformerCount] = useState<number>(performerCount);
   const [menuPerformerList, setMenuPerformerList] = useState<string[]>(performerList);
   const [menuPunishmentList, setMenuPunishmentList] = useState<string[]>(punishmentList);
+  const [menuPunishmentOrderList, setMenuPunishmentOrderList] = useState<string[]>(punishmentOrderList);
   const [menuWheelValues, setMenuWheelValues] = useState<Part[]>(wheelValues);
 
   const handlePunishmentChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
@@ -65,7 +106,7 @@ const Settings = () => {
     });
 
     setMenuPunishmentList(updatedList);
-  }
+  };
 
   const handlePerformerChange = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
     const updatedList = menuPerformerList.map((performer, index) => {
@@ -77,7 +118,7 @@ const Settings = () => {
     });
 
     setMenuPerformerList(updatedList);
-  }
+  };
 
   const handlePerformerCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMenuPerformerCount(Number(event.target.value))
@@ -94,6 +135,18 @@ const Settings = () => {
     setMenuWheelValues(getWheelValues(menuPerformerCount));
   };
 
+  const handlePunishmentOrderListChange = (event: React.ChangeEvent<HTMLSelectElement>, id: number) => {
+    const updatedList = menuPunishmentOrderList.map((punishmentOrderOption, index) => {
+      if(id === index) {
+        return event.target.value;
+      }
+
+      return punishmentOrderOption;
+    });
+
+    setMenuPunishmentOrderList(updatedList);
+  };
+
   const [showDrawer, setShowDrawer] = useState(false);
 
   const handleClose = () => setShowDrawer(false);
@@ -103,6 +156,7 @@ const Settings = () => {
     const menuShowSettings: ShowSettings = {
       performerCount: menuPerformerCount,
       performerList: menuPerformerList,
+      punishmentOrderList: menuPunishmentOrderList,
       punishmentList: menuPunishmentList,
       wheelValues: getWheelValues(menuPerformerCount),
       spinOrder: getSpinOrder(menuPerformerCount),
@@ -130,7 +184,7 @@ const Settings = () => {
         <Offcanvas.Body>
           <Form onSubmit={handleSubmit}>
             <Row>
-              <Form.Group as={Col} sm={3} className="mb-3" controlId="fromNumberOfPerformers">
+              <Form.Group as={Col} sm={3} className="mb-3">
                 <Form.Label># of Performers</Form.Label>
                 <Form.Control
                   type="number"
@@ -139,7 +193,7 @@ const Settings = () => {
                   min={1}
                   onChange={handlePerformerCountChange}/>
               </Form.Group>
-              <Form.Group as={Col} sm={3} className="mb-3" controlId="formLineup">
+              <Form.Group as={Col} sm={3} className="mb-3">
                 <Form.Label>Lineup</Form.Label>
                   {getPerformerNameTextInputRows(menuPerformerList, menuPerformerCount, handlePerformerChange)}
               </Form.Group>
@@ -147,9 +201,15 @@ const Settings = () => {
             <Accordion className="mb-3" flush>
               <Accordion.Header>Secret Settings</Accordion.Header>
               <Accordion.Body>
-                <Form.Group as={Col} sm={3} className="mb-3" controlId="formPunishments">
-                  <Form.Label>Punishments</Form.Label>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Group as={Col} sm={3} className="mb-3">
+                    <Form.Label>Punishments</Form.Label>
                     {getPunishmentNameTextInputRows(menuPunishmentList, menuPerformerCount, handlePunishmentChange)}
+                  </Form.Group>
+                  <Form.Group as={Col} sm={3} className="mb-3">
+                    <Form.Label>Random or In Order Punishment?</Form.Label>
+                    {getPunishmentOrderInputRows(menuPunishmentOrderList, menuPerformerCount, handlePunishmentOrderListChange)}
+                  </Form.Group>
                 </Form.Group>
               </Accordion.Body>
             </Accordion>

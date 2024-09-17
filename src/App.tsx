@@ -38,8 +38,20 @@ const App = () => {
   }
 
   const showSettings: ShowSettings = cookies[SHOW_SETTINGS];
-  const [showSettingsContextState, setShowSettingsContextState] = useState<ShowSettings>(showSettings);
-  const {wheelValues, performerCount, performerList, punishmentList, spinOrder} = showSettingsContextState;
+
+  const [
+    showSettingsContextState,
+    setShowSettingsContextState
+  ] = useState<ShowSettings>(showSettings);
+
+  const {
+    wheelValues,
+    performerCount,
+    performerList,
+    punishmentOrderList,
+    punishmentList,
+    spinOrder
+  } = showSettingsContextState;
 
   const handleShowSettingsUpdate = (updatedShowSettings: ShowSettings) => {
     setCookie(SHOW_SETTINGS, updatedShowSettings, {expires: tenYearsFromNow});
@@ -85,6 +97,7 @@ const App = () => {
     <ShowSettingsContext.Provider value={{
       wheelValues,
       punishmentList,
+      punishmentOrderList,
       performerList,
       performerCount,
       spinOrder,

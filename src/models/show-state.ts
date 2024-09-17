@@ -6,6 +6,3 @@ export interface ShowState {
   wheelPosition: number;
   activePage: string;
 }
-
-export const RANDOM_PUNISHMENT = 'random_punishment';
-export const IN_ORDER_PUNISHMENT = 'in_order_punishment';

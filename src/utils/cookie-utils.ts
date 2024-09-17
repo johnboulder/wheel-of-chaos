@@ -1,9 +1,19 @@
-import {ShowSettings, ShowSettingsContextType} from '../models/show-settings';
+import {PunishmentOrderOption, ShowSettings, ShowSettingsContextType} from '../models/show-settings';
 
 export const SHOW_SETTINGS = 'show-settings';
 
 export const DEFAULT_SETTINGS: ShowSettings = {
   performerCount: 8,
+  punishmentOrderList: [
+    PunishmentOrderOption.RANDOM,
+    PunishmentOrderOption.RANDOM,
+    PunishmentOrderOption.RANDOM,
+    PunishmentOrderOption.RANDOM,
+    PunishmentOrderOption.RANDOM,
+    PunishmentOrderOption.RANDOM,
+    PunishmentOrderOption.RANDOM,
+    PunishmentOrderOption.RANDOM,
+  ],
   performerList: [
     'Joey Bednarski',
     'Sonal Aggarwal',
@@ -48,5 +58,6 @@ export const DEFAULT_SETTINGS: ShowSettings = {
 
 export const DEFAULT_SHOW_SETTINGS_CONTEXT: ShowSettingsContextType = {
   ...DEFAULT_SETTINGS,
-  setShowSettings: (showSettings: ShowSettings)=> {},
+  setShowSettings: (showSettings: ShowSettings) => {
+  },
 };
