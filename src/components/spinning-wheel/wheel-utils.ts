@@ -2,6 +2,7 @@
 
 import {Part} from "./spinning-wheel";
 import {SEGMENT_DETECTOR_CLASS} from "./constants";
+import {PunishmentSelectionType} from '../../cookies/show-settings';
 
 export interface SegmentSearchInfo {
   lower: number;
@@ -220,4 +221,22 @@ export const getRotationDegreesOfNextSegment = (
   console.log(`randomIntervalValue: ${randomIntervalValue}`);
 
   return baseRotationValueDegrees + runningRotationTotal + randomIntervalValue;
+};
+
+export const getAssignedPunishment = (
+  performerIndex: number,
+  punishmentList: string[],
+  punishmentSelectionTypeList: string[],
+  randomPunishmentPool: string[],
+  updatePunishmentPoolCallback: (punishmentPool: string[]) => void
+) => {
+  const punishmentSelectionType = punishmentSelectionTypeList[performerIndex];
+  if(punishmentSelectionType === PunishmentSelectionType.IN_ORDER) {
+    return punishmentList[performerIndex];
+  } else {
+    const randomIndex = Math.floor(Math.random() * randomPunishmentPool.length);
+    const punishment = randomPunishmentPool[randomIndex];
+    updatePunishmentPoolCallback(randomPunishmentPool.splice(randomIndex, 1));
+    return punishment;
+  }
 };

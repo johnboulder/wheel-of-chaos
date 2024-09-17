@@ -8,13 +8,13 @@ import {useCookies} from 'react-cookie';
 import {
   DEFAULT_SETTINGS,
   DEFAULT_SHOW_SETTINGS_CONTEXT,
-  SHOW_SETTINGS,
-} from './utils/cookie-utils';
+  SHOW_SETTINGS_COOKIE_KEY,
+} from './cookies/show-settings';
 import Settings from './components/settings/settings';
 import IconButton from './components/icon-button';
 import {BsArrowRightSquareFill} from 'react-icons/bs';
 import {NextButton} from './models/next-button';
-import {ShowSettings, ShowSettingsContextType} from './models/show-settings';
+import {ShowSettings, ShowSettingsContextType} from './cookies/show-settings';
 
 export const ShowSettingsContext = createContext<ShowSettingsContextType>(DEFAULT_SHOW_SETTINGS_CONTEXT);
 
@@ -31,13 +31,13 @@ const App = () => {
   const today = new Date();
   const tenYearsFromNow = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
 
-  const [cookies, setCookie] = useCookies([SHOW_SETTINGS]);
+  const [cookies, setCookie] = useCookies([SHOW_SETTINGS_COOKIE_KEY]);
 
-  if(!cookies[SHOW_SETTINGS]) {
-    setCookie(SHOW_SETTINGS, DEFAULT_SETTINGS, {expires: tenYearsFromNow});
+  if(!cookies[SHOW_SETTINGS_COOKIE_KEY]) {
+    setCookie(SHOW_SETTINGS_COOKIE_KEY, DEFAULT_SETTINGS, {expires: tenYearsFromNow});
   }
 
-  const showSettings: ShowSettings = cookies[SHOW_SETTINGS];
+  const showSettings: ShowSettings = cookies[SHOW_SETTINGS_COOKIE_KEY];
 
   const [
     showSettingsContextState,
@@ -48,13 +48,14 @@ const App = () => {
     wheelValues,
     performerCount,
     performerList,
-    punishmentOrderList,
+    punishmentSelectionTypeList,
+    randomPunishmentPool,
     punishmentList,
     spinOrder
   } = showSettingsContextState;
 
   const handleShowSettingsUpdate = (updatedShowSettings: ShowSettings) => {
-    setCookie(SHOW_SETTINGS, updatedShowSettings, {expires: tenYearsFromNow});
+    setCookie(SHOW_SETTINGS_COOKIE_KEY, updatedShowSettings, {expires: tenYearsFromNow});
     setShowSettingsContextState(updatedShowSettings);
   };
 
@@ -97,7 +98,8 @@ const App = () => {
     <ShowSettingsContext.Provider value={{
       wheelValues,
       punishmentList,
-      punishmentOrderList,
+      punishmentSelectionTypeList,
+      randomPunishmentPool,
       performerList,
       performerCount,
       spinOrder,

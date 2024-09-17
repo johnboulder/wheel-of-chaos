@@ -1,7 +1,7 @@
 import React, {CSSProperties, useCallback, useContext, useEffect, useState} from "react"
 import './spinning-wheel.scss';
 import {
-  detectSegmentIntersection,
+  detectSegmentIntersection, getAssignedPunishment,
   getContentSkewY,
   getNextSpinSegment,
   getRotationDegreesOfNextSegment,
@@ -25,6 +25,11 @@ import {NextButtonContext, ShowSettingsContext} from '../../App';
 
 /**
  * TODO
+ *  - Show State
+ *    - Record state in cookies
+ *    - Use show-state to determine what to display to users when the app loads initially
+ *    - Need a button in the settings to restart the show
+ *    - Need to update a list of show states in the cookies on each click of next button
  *  - Show Flow
  *   - Add backward button
  *  - Settings Form
@@ -63,8 +68,21 @@ export interface WheelProps {
 }
 
 export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
-  const {wheelValues, performerList, punishmentList, spinOrder} = useContext(ShowSettingsContext);
-  const {isWheelSpinRequested, showCoverMessage, setIsWheelSpinRequested, setShowCoverMessage} = useContext(NextButtonContext);
+  const {
+    wheelValues,
+    performerList,
+    punishmentList,
+    spinOrder,
+    punishmentSelectionTypeList,
+    randomPunishmentPool
+  } = useContext(ShowSettingsContext);
+
+  const {
+    isWheelSpinRequested,
+    showCoverMessage,
+    setIsWheelSpinRequested,
+    setShowCoverMessage
+  } = useContext(NextButtonContext);
 
   const segmentSize = getSegmentSize(wheelValues.length);
   const [width, height] = getWidthAndHeight(wheelValues.length);
@@ -106,6 +124,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   const animationDuration = 5000;
   const [spinIterator, setSpinIterator] = useState<number>(0);
   const [nextAnimationDegrees, setNextAnimationDegrees] = useState<number>(0);
+  const [assignedPunishment, setAssignedPunishment] = useState<string>('');
 
   const defaultStyle: CSSProperties = {
     transform: `rotate(${nextAnimationDegrees}deg)`,
@@ -131,7 +150,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     setTransitionStyles(nextAnimationDegrees);
   }, [nextAnimationDegrees]);
 
-  const endListener = (node: HTMLElement, done: any) => {
+  const transitionEndListener = (node: HTMLElement, done: any) => {
     node.addEventListener('transitionend', (e) => {
       detectSegmentIntersection(e, done);
 
@@ -139,6 +158,15 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
       setSpinIterator(spinIterator + 1);
       setShowCoverMessage(!showCoverMessage);
       stopSpinMusic();
+      setAssignedPunishment(
+        getAssignedPunishment(
+          spinIterator - 1,
+          punishmentList,
+          punishmentSelectionTypeList,
+          randomPunishmentPool,
+          () => {}
+        )
+      )
     }, false);
   }
 
@@ -182,7 +210,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
         <Ticker/>
         <div className='wheel-container'>
           <SegmentDetector/>
-          <Transition<undefined> in={isSpinning} timeout={animationDuration} addEndListener={endListener}>
+          <Transition<undefined> in={isSpinning} timeout={animationDuration} addEndListener={transitionEndListener}>
             {state => (
                 <div className='wheel' style={{
                   ...defaultStyle,
@@ -210,7 +238,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
                 ref={punishmentRef}
                 style={{fontSize: `${punishmentFontSize}vmax`}}
             >
-              {punishmentList[spinIterator - 1]}
+              {assignedPunishment}
             </div>
           </ShowCover>
         </div>

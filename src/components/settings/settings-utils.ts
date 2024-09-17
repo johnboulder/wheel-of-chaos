@@ -1,4 +1,5 @@
 import {Part} from '../spinning-wheel/spinning-wheel';
+import {PunishmentSelectionType} from '../../cookies/show-settings';
 
 export const orderedWheelSegmentList = [
   {value: 'punishment', color: '#FCF69C', isPunishment: true},
@@ -21,4 +22,16 @@ export const getWheelValues = (wheelSize: number): Part[] => {
     wheelValues.push(getWheelSegmentForIndex(index));
   }
   return wheelValues;
+};
+
+export const getPunishmentPool = (punishmentList: string[], punishmentSelectionTypeList: string[]): string[] => {
+  const punishmentPool: string[] = [];
+
+  punishmentSelectionTypeList.forEach((punishmentOrderOption, index) => {
+    if(punishmentOrderOption === PunishmentSelectionType.RANDOM) {
+      punishmentPool.push(punishmentList[index]);
+    }
+  });
+
+  return punishmentPool;
 };
