@@ -43,8 +43,9 @@
     height: 1px;
     background-color: crimson;
 
-    position: fixed;
-    top: 20%;
+    position: absolute;
+    top: 39.95%;
     left: 50%;
+    z-index: 10;
   }
 }

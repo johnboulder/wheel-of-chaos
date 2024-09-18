@@ -10,12 +10,6 @@ import {PunishmentSelectionType, PunishmentSelectionTypeMessages, ShowSettings} 
 import {DEFAULT_SHOW_STATE_HISTORY} from '../../cookies/show-state';
 import {getNewShowStateHistory} from '../../cookies/show-state-history-utils';
 
-/**
- * TODO
- *  - On submit, we need to also update the showStateHistory cookie
- *  - Add a button to restart show
- */
-
 const getSpinOrder = (performerCount: number): string[] => {
   const spinOrder: string[] = [];
   for (let i = 0; i < performerCount; i++) {
@@ -130,18 +124,28 @@ const Settings = () => {
   };
 
   const handlePerformerCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMenuPerformerCount(Number(event.target.value))
-    while(menuPerformerList.length < menuPerformerCount) {
-      menuPerformerList.push("");
-    }
-    setMenuPerformerList(menuPerformerList);
+    const updatedPerformerCount = Number(event.target.value);
+    const updatedPerformerList = [];
+    const updatedPunishmentList = [];
+    const updatedPunishmentSelectionTypeList = [];
 
-    while(menuPunishmentList.length < menuPerformerCount) {
-      menuPunishmentList.push("");
+    for(let i = 0; i < menuPerformerCount; i++) {
+      if(i < menuPerformerList.length) {
+        updatedPerformerList.push(menuPerformerList[i]);
+        updatedPunishmentList.push(menuPunishmentList[i]);
+        updatedPunishmentSelectionTypeList.push(punishmentSelectionTypeList[i]);
+      } else {
+        updatedPerformerList.push("");
+        updatedPunishmentList.push("");
+        updatedPunishmentSelectionTypeList.push(PunishmentSelectionType.RANDOM);
+      }
     }
-    setMenuPunishmentList(menuPunishmentList);
 
-    setMenuWheelValues(getWheelValues(menuPerformerCount));
+    setMenuPerformerList(updatedPerformerList);
+    setMenuPunishmentList(updatedPunishmentList);
+    setMenuPerformerCount(updatedPerformerCount);
+    setMenuPunishmentSelectionTypeList(updatedPunishmentSelectionTypeList);
+    setMenuWheelValues(getWheelValues(updatedPerformerCount));
   };
 
   const handlePunishmentOrderListChange = (event: React.ChangeEvent<HTMLSelectElement>, id: number) => {

@@ -1,5 +1,4 @@
 import {PageName, ShowStateHistory} from './show-state';
-import {DEFAULT_SHOW_SETTINGS, ShowSettings} from './show-settings';
 
 export const getActivePage = (showCoverMessage:boolean): string => {
   if(showCoverMessage) {

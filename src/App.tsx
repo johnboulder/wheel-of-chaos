@@ -196,7 +196,7 @@ const App = () => {
                             </div>
                             <div className='d-flex justify-content-end align-items-start min-vh-50'>
                                 <div
-                                    style={showPerformerName ? showElementTransitionStyle : hideElementTransitionStyle}>
+                                    style={showPerformerName && !showCoverMessage ? showElementTransitionStyle : hideElementTransitionStyle}>
                                   {currentPerformer}
                                 </div>
                             </div>

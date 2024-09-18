@@ -169,17 +169,33 @@ export const getNextSpinSegment = (
 /**
  * Using
  */
-export const detectSegmentIntersection = (e: TransitionEvent, done: any) => {
+export const getWheelSegmentIntersectionId = (): string => {
   const segmentDetector = document.querySelector(`.${SEGMENT_DETECTOR_CLASS}`);
-  const rectangle = segmentDetector!.getBoundingClientRect();
-  const x = rectangle.left;
-  const y = rectangle.top;
+  const wheelParts = document.querySelectorAll('.part');
+  let partId = '';
+  let intersectedPart: Element | undefined;
+  wheelParts.forEach((part) => {
+    const detectorRectangle = segmentDetector!.getBoundingClientRect();
+    const partRectangle = part.getBoundingClientRect();
 
-  const segment = document.elementFromPoint(x, y);
+    if (
+      detectorRectangle.x < partRectangle.x + partRectangle.width &&
+      detectorRectangle.x + detectorRectangle.width > partRectangle.x &&
+      detectorRectangle.y < partRectangle.y + partRectangle.height &&
+      detectorRectangle.y + detectorRectangle.height > partRectangle.y
+    ) {
+      console.log("Elements touch each other");
+      intersectedPart = part;
+    } else {
+      console.log("Elements do not touch each other");
+    }
+  });
 
-  const segmentMessage = segment!.textContent;
-  console.log(`The user has landed on: ${segmentMessage}`);
-  done(e);
+  if(intersectedPart) {
+    partId = intersectedPart.id
+  }
+
+  return partId;
 };
 
 export const randomIntFromInterval = (min: number, max: number) => {

@@ -1,7 +1,8 @@
 import React, {CSSProperties, useContext, useEffect, useState} from "react"
 import './spinning-wheel.scss';
 import {
-  detectSegmentIntersection, getAssignedPunishment,
+  getWheelSegmentIntersectionId,
+  getAssignedPunishment,
   getContentSkewY,
   getNextSpinSegment,
   getRotationDegreesOfNextSegment,
@@ -30,7 +31,6 @@ import {hideElementTransitionStyle, showElementTransitionStyle} from '../../util
  * TODO
  *  - Show State
  *    - Use show-state to determine what to display to users when the app loads initially
- *    - Need a button in the settings to restart the show
  *  - Show Flow
  *   - Add backward button
  *  - Settings Form
@@ -107,13 +107,14 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     const className = part.isPunishment ? 'skull' : 'happy';
 
     return (
-      <div className='part' style={partStyle} key={index}>
+      <div className='part' style={partStyle} id={`wheel-part-${index}`}>
         <div className='content' style={contentStyle}>
           <img className={className} alt={part.value} src={imageAsset}/>
         </div>
       </div>
     );
   });
+
   const {
     performerIndex: performerIndexFromHistory,
     randomPunishmentPool,
@@ -176,9 +177,9 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
 
   const transitionEndListener = (node: HTMLElement, done: any) => {
     const eventListener = (e: TransitionEvent) => {
-      detectSegmentIntersection(e, done);
+      const intersectedPartId = getWheelSegmentIntersectionId();
+      const intersectedPartIndex = parseInt(intersectedPartId.split('-')[2]);
 
-      // TODO if spin iterator is greater than spin order, we need to have an end animation or something
       setSpinIterator(spinIterator + 1);
       setShowCoverMessage(!showCoverMessage);
       stopSpinMusic();
