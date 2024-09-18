@@ -185,7 +185,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   }, [nextAnimationDegrees]);
 
   const transitionEndListener = (node: HTMLElement, done: any) => {
-    node.addEventListener('transitionend', (e) => {
+    const eventListener = (e: TransitionEvent) => {
       detectSegmentIntersection(e, done);
 
       // TODO if spin iterator is greater than spin order, we need to have an end animation or something
@@ -202,7 +202,10 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
         )
       )
       updateShowStateHistory();
-    }, false);
+      node.removeEventListener('transitionend', eventListener);
+    };
+
+    node.addEventListener('transitionend', eventListener, false);
   }
 
   const [comicFontSize, setComicFontSize] = useState<number>(8);
