@@ -129,7 +129,7 @@ const Settings = () => {
     const updatedPunishmentList = [];
     const updatedPunishmentSelectionTypeList = [];
 
-    for(let i = 0; i < menuPerformerCount; i++) {
+    for(let i = 0; i < updatedPerformerCount; i++) {
       if(i < menuPerformerList.length) {
         updatedPerformerList.push(menuPerformerList[i]);
         updatedPunishmentList.push(menuPunishmentList[i]);
@@ -146,9 +146,11 @@ const Settings = () => {
     setMenuPerformerCount(updatedPerformerCount);
     setMenuPunishmentSelectionTypeList(updatedPunishmentSelectionTypeList);
     setMenuWheelValues(getWheelValues(updatedPerformerCount));
+
+    console.log('updatedPerformerCount: ', updatedPerformerCount);
   };
 
-  const handlePunishmentOrderListChange = (event: React.ChangeEvent<HTMLSelectElement>, id: number) => {
+  const handlePunishmentSelectionTypeListChange = (event: React.ChangeEvent<HTMLSelectElement>, id: number) => {
     const updatedList = menuPunishmentSelectionTypeList.map((punishmentOrderOption, index) => {
       if(id === index) {
         return event.target.value;
@@ -236,7 +238,7 @@ const Settings = () => {
                   </Form.Group>
                   <Form.Group as={Col} sm={3} className="mb-3">
                     <Form.Label>Random or In Order Punishment?</Form.Label>
-                    {getPunishmentSelectionTypeInputRows(menuPunishmentSelectionTypeList, menuPerformerCount, handlePunishmentOrderListChange)}
+                    {getPunishmentSelectionTypeInputRows(menuPunishmentSelectionTypeList, menuPerformerCount, handlePunishmentSelectionTypeListChange)}
                   </Form.Group>
                 </Form.Group>
               </Accordion.Body>
