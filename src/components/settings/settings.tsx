@@ -189,7 +189,7 @@ const Settings = () => {
       setShowStateHistory
     } = showStateHistory;
 
-    setShowStateHistory(DEFAULT_SHOW_STATE_HISTORY);
+    setShowStateHistory(getNewShowStateHistory(showSettings.randomPunishmentPool));
     window.location.reload();
   };
 
