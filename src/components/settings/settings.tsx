@@ -8,6 +8,7 @@ import {getPunishmentPool, getWheelValues} from './settings-utils';
 import IconButton from '../icon-button';
 import {PunishmentSelectionType, PunishmentSelectionTypeMessages, ShowSettings} from '../../cookies/show-settings';
 import {DEFAULT_SHOW_STATE_HISTORY} from '../../cookies/show-state';
+import {getNewShowStateHistory} from '../../cookies/show-state-history-utils';
 
 /**
  * TODO
@@ -161,6 +162,10 @@ const Settings = () => {
   const handleShow = () => setShowDrawer(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const {
+      setShowStateHistory
+    } = showStateHistory;
+
     const menuShowSettings: ShowSettings = {
       performerCount: menuPerformerCount,
       performerList: menuPerformerList,
@@ -171,6 +176,7 @@ const Settings = () => {
       spinOrder: getSpinOrder(menuPerformerCount),
     };
 
+    setShowStateHistory(getNewShowStateHistory(menuShowSettings.randomPunishmentPool));
     setShowSettings(menuShowSettings);
   };
 
