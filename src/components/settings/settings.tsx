@@ -8,6 +8,12 @@ import {getPunishmentPool, getWheelValues} from './settings-utils';
 import IconButton from '../icon-button';
 import {PunishmentSelectionType, PunishmentSelectionTypeMessages, ShowSettings} from '../../cookies/show-settings';
 
+/**
+ * TODO
+ *  - On submit, we need to also update the showStateHistory cookie
+ *  - Add a button to restart show
+ */
+
 const getSpinOrder = (performerCount: number): string[] => {
   const spinOrder: string[] = [];
   for (let i = 0; i < performerCount; i++) {

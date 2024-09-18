@@ -26,7 +26,7 @@ export interface ShowSettingsContextType extends ShowSettings {
   setShowSettings(showSettings: ShowSettings): void;
 }
 
-export const DEFAULT_SETTINGS: ShowSettings = {
+export const DEFAULT_SHOW_SETTINGS: ShowSettings = {
   performerCount: 8,
   punishmentSelectionTypeList: [
     PunishmentSelectionType.RANDOM,
@@ -91,7 +91,7 @@ export const DEFAULT_SETTINGS: ShowSettings = {
 };
 
 export const DEFAULT_SHOW_SETTINGS_CONTEXT: ShowSettingsContextType = {
-  ...DEFAULT_SETTINGS,
+  ...DEFAULT_SHOW_SETTINGS,
   setShowSettings: (showSettings: ShowSettings) => {
   },
 };

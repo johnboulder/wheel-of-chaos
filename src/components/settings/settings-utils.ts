@@ -6,6 +6,8 @@ export const orderedWheelSegmentList = [
   {value: 'punishment', color: '#55D8C1', isPunishment: true},
   {value: 'punishment', color: '#F8333C', isPunishment: true},
   {value: 'punishment', color: '#EFCEFA', isPunishment: true},
+  {value: 'punishment', color: '#FF6FB5', isPunishment: true},
+  {value: 'punishment', color: '#AB46D2', isPunishment: true},
 ];
 
 export const getWheelSegmentForIndex = (index: number): Part => {

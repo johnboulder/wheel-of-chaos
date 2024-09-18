@@ -21,15 +21,14 @@ import triPoloskiMusic from "../../assets/audio/tri_poloski.mp3";
 import useSound from "use-sound";
 import {Ticker} from "../ticker/ticker";
 import {useMeasure, useWindowSize} from "react-use";
-import {NextButtonContext, ShowSettingsContext} from '../../App';
+import {NextButtonContext, ShowSettingsContext, ShowStateHistoryContext} from '../../App';
+import {PageName, ShowState} from '../../cookies/show-state';
 
 /**
  * TODO
  *  - Show State
- *    - Record state in cookies
  *    - Use show-state to determine what to display to users when the app loads initially
  *    - Need a button in the settings to restart the show
- *    - Need to update a list of show states in the cookies on each click of next button
  *  - Show Flow
  *   - Add backward button
  *  - Settings Form
@@ -74,7 +73,6 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     punishmentList,
     spinOrder,
     punishmentSelectionTypeList,
-    randomPunishmentPool
   } = useContext(ShowSettingsContext);
 
   const {
@@ -83,6 +81,11 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     setIsWheelSpinRequested,
     setShowCoverMessage
   } = useContext(NextButtonContext);
+
+  const {
+    showStateHistory,
+    setShowStateHistory
+  } = useContext(ShowStateHistoryContext);
 
   const segmentSize = getSegmentSize(wheelValues.length);
   const [width, height] = getWidthAndHeight(wheelValues.length);
@@ -119,11 +122,16 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
       </div>
     );
   });
+  const {
+    performerIndex: performerIndexFromHistory,
+    randomPunishmentPool,
+    wheelRotationDegrees: wheelRotationDegreesFromHistory,
+  } = showStateHistory[showStateHistory.length - 1];
 
   // TODO randomize the time spent spinning?
   const animationDuration = 5000;
-  const [spinIterator, setSpinIterator] = useState<number>(0);
-  const [nextAnimationDegrees, setNextAnimationDegrees] = useState<number>(0);
+  const [spinIterator, setSpinIterator] = useState<number>(performerIndexFromHistory);
+  const [nextAnimationDegrees, setNextAnimationDegrees] = useState<number>(wheelRotationDegreesFromHistory);
   const [assignedPunishment, setAssignedPunishment] = useState<string>('');
 
   const defaultStyle: CSSProperties = {
@@ -134,6 +142,32 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   const [transitionStyles, setTransitionStyles] = useTransitionStyle(nextAnimationDegrees);
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
   const [playSpinMusic, { stop: stopSpinMusic }] = useSound(triPoloskiMusic);
+
+  const getActivePage = (): string => {
+    if(showCoverMessage) {
+      return PageName.PERFORMER_PUNISHMENT_PAGE
+    } else {
+      return PageName.WHEEL_PAGE;
+    }
+  };
+
+  const updateShowStateHistory = () => {
+    const updatedShowStateHistory = showStateHistory;
+    const latestUpdate: ShowState = {
+      performerIndex: spinIterator - 1,
+      randomPunishmentPool: randomPunishmentPool.filter((punishment) => punishment !== assignedPunishment),
+      activePage: getActivePage(),
+      wheelRotationDegrees: nextAnimationDegrees,
+      pageState: {
+        isShowStarted: true,
+        showCoverMessage: showCoverMessage
+      }
+    };
+    console.log('History updated with: ', latestUpdate);
+    updatedShowStateHistory.push(latestUpdate);
+
+    setShowStateHistory({showStateHistory: updatedShowStateHistory});
+  }
 
   useEffect(() => {
     if (isWheelSpinRequested) {
@@ -160,13 +194,14 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
       stopSpinMusic();
       setAssignedPunishment(
         getAssignedPunishment(
-          spinIterator - 1,
+          spinIterator,
           punishmentList,
           punishmentSelectionTypeList,
           randomPunishmentPool,
           () => {}
         )
       )
+      updateShowStateHistory();
     }, false);
   }
 
