@@ -23,10 +23,11 @@ import {
   ShowStateHistory,
   ShowStateHistoryContextType
 } from './cookies/show-state';
+import {hideElementTransitionStyle, showElementTransitionStyle} from './utils/css-util';
 
 export const ShowSettingsContext = createContext<ShowSettingsContextType>(DEFAULT_SHOW_SETTINGS_CONTEXT);
 export const ShowStateHistoryContext = createContext<ShowStateHistoryContextType>(DEFAULT_SHOW_STATE_HISTORY_CONTEXT);
-export const NextButtonContext = createContext<NextButton>(DEFAULT_NEXT_BUTTON_CONTEXT)
+export const NextButtonContext = createContext<NextButton>(DEFAULT_NEXT_BUTTON_CONTEXT);
 
 const App = () => {
   const today = new Date();
@@ -93,8 +94,10 @@ const App = () => {
     setShowSettingsContextState(updatedShowSettings);
   };
 
+  const [currentPerformer, setCurrentPerformer] = useState<string>(performerList[showStateHistory[showStateHistory.length - 1].performerIndex]);
   const [isShowStarted, setIsShowStarted] = useState<boolean>(isShowStartedFromCookie);
   const [showCoverMessage, setShowCoverMessage] = useState<boolean>(showCoverMessageFromCookie);
+  const [showPerformerName, setShowPerformerName] = useState<boolean>(false);
   const [isWheelSpinRequested, setIsWheelSpinRequested] = useState<boolean>(false);
 
   const handleShowStateHistoryUpdate = (updatedShowStateHistory: ShowStateHistory) => {
@@ -110,10 +113,15 @@ const App = () => {
       if(showCoverMessage) {
         setShowCoverMessage(false);
         setIsWheelSpinRequested(false);
+        setShowPerformerName(false);
+      } else if(!showPerformerName){
+        setShowPerformerName(true);
       } else {
         setIsWheelSpinRequested(true);
       }
     }
+
+    setCurrentPerformer(performerList[showStateHistory[showStateHistory.length - 1].performerIndex]);
   };
 
   const defaultStyle: CSSProperties = {
@@ -146,6 +154,8 @@ const App = () => {
       setShowSettings: handleShowSettingsUpdate
     }}>
       <NextButtonContext.Provider value={{
+        setShowPerformerName,
+        showPerformerName,
         setIsWheelSpinRequested,
         handleNextButtonClick,
         isShowStarted,
@@ -172,6 +182,25 @@ const App = () => {
                                 <SpinningWheel wheelValues={wheelValues}/>
                             </div>
                         </div>
+                        <div
+                            className='col-sm-5 performerNameTitle'
+                            style={showCoverMessage ? hideElementTransitionStyle : showElementTransitionStyle}
+                        >
+                            <div className='d-flex justify-content-center align-items-end min-vh-50'>
+                                <div
+                                    className='p-1'
+                                    style={{fontSize: '1em'}}
+                                >
+                                    Up Next:
+                                </div>
+                            </div>
+                            <div className='d-flex justify-content-end align-items-start min-vh-50'>
+                                <div
+                                    style={showPerformerName ? showElementTransitionStyle : hideElementTransitionStyle}>
+                                  {currentPerformer}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </>
             }
@@ -181,7 +210,7 @@ const App = () => {
             <Settings/>
           </div>
           <IconButton className='next-btn' onClick={handleNextButtonClick}>
-            <BsArrowRightSquareFill/>
+          <BsArrowRightSquareFill/>
           </IconButton>
         </ShowStateHistoryContext.Provider>
       </NextButtonContext.Provider>

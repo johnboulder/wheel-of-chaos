@@ -20,6 +20,17 @@ body {
   bottom: 6%;
 }
 
+.performerNameTitle {
+  color: white;
+  font-family: Propaganda;
+  font-size: 3em;
+  filter: drop-shadow(2px 4px 6px black);
+}
+
+.min-vh-50 {
+  min-height: 50vh !important;
+}
+
 $red: #F8333C;
 $pink_lace: #EFCEFA;
 $hot_pink: #FF6FB5;

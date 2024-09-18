@@ -1,4 +1,4 @@
-import React, {CSSProperties, useCallback, useContext, useEffect, useState} from "react"
+import React, {CSSProperties, useContext, useEffect, useState} from "react"
 import './spinning-wheel.scss';
 import {
   detectSegmentIntersection, getAssignedPunishment,
@@ -22,8 +22,9 @@ import useSound from "use-sound";
 import {Ticker} from "../ticker/ticker";
 import {useMeasure, useWindowSize} from "react-use";
 import {NextButtonContext, ShowSettingsContext, ShowStateHistoryContext} from '../../App';
-import {PageName, ShowState} from '../../cookies/show-state';
+import {ShowState} from '../../cookies/show-state';
 import {getActivePage} from '../../cookies/show-state-history-utils';
+import {hideElementTransitionStyle, showElementTransitionStyle} from '../../utils/css-util';
 
 /**
  * TODO
@@ -46,16 +47,6 @@ import {getActivePage} from '../../cookies/show-state-history-utils';
  *    - Flow order: Comedian name -> Wheel + Comedian Name -> Punishment -> Punishment + Comedian Name
  *  - Add ability to return to previous state of show
  */
-
-const showCoverStyle: CSSProperties = {
-  opacity: '100%',
-  transition: 'ease-in-out 2s'
-};
-
-const hideCoverStyle: CSSProperties = {
-  opacity: '0%',
-  transition: 'ease-in-out 2s'
-};
 
 export interface Part {
   value: string;
@@ -259,7 +250,7 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
             )}
           </Transition>
         </div>
-        <div style={showCoverMessage ? showCoverStyle : hideCoverStyle}>
+        <div style={showCoverMessage ? showElementTransitionStyle : hideElementTransitionStyle}>
           <ShowCover>
             <div
                 className='comic flow-text'
