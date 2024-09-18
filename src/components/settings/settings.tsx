@@ -1,12 +1,13 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, MouseEventHandler} from 'react';
 import {BsGearFill} from 'react-icons/bs';
 import './settings.scss';
 import {Accordion, Button, Col, Form, InputGroup, Offcanvas, Row} from 'react-bootstrap';
-import {ShowSettingsContext} from '../../App';
+import {ShowSettingsContext, ShowStateHistoryContext} from '../../App';
 import {Part} from '../spinning-wheel/spinning-wheel';
 import {getPunishmentPool, getWheelValues} from './settings-utils';
 import IconButton from '../icon-button';
 import {PunishmentSelectionType, PunishmentSelectionTypeMessages, ShowSettings} from '../../cookies/show-settings';
+import {DEFAULT_SHOW_STATE_HISTORY} from '../../cookies/show-state';
 
 /**
  * TODO
@@ -86,6 +87,7 @@ const getTextInputRowsToRender = (list: string[], placeHolderText: string, perfo
 
 const Settings = () => {
   const showSettings = useContext(ShowSettingsContext);
+  const showStateHistory = useContext(ShowStateHistoryContext);
 
   const {
     performerCount,
@@ -172,6 +174,15 @@ const Settings = () => {
     setShowSettings(menuShowSettings);
   };
 
+  const handleRestartShow: MouseEventHandler<HTMLButtonElement> = () => {
+    const {
+      setShowStateHistory
+    } = showStateHistory;
+
+    setShowStateHistory(DEFAULT_SHOW_STATE_HISTORY);
+    window.location.reload();
+  };
+
   return (
     <>
       <IconButton onClick={handleShow} className='settings-btn'>
@@ -220,9 +231,16 @@ const Settings = () => {
                 </Form.Group>
               </Accordion.Body>
             </Accordion>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
+            <Form.Group as={Row} className="mb-3">
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form.Group>
+              <Form.Group as={Row} className="mb-3">
+                <Button variant="secondary" onClick={handleRestartShow}>
+                  Restart Show
+                </Button>
+              </Form.Group>
           </Form>
         </Offcanvas.Body>
       </Offcanvas>

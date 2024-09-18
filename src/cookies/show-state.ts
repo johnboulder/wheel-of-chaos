@@ -17,6 +17,7 @@ export interface ShowState {
 export interface CommonPageState {
   isShowStarted: boolean,
   showCoverMessage: boolean,
+  assignedPunishment: string,
 }
 
 export const PageName = {
@@ -36,6 +37,7 @@ export const DEFAULT_SHOW_STATE_HISTORY: ShowStateHistory = {
       pageState: {
         isShowStarted: false,
         showCoverMessage: false,
+        assignedPunishment: '',
       }
     }
   ],

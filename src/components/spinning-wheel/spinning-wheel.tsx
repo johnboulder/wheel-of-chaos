@@ -23,6 +23,7 @@ import {Ticker} from "../ticker/ticker";
 import {useMeasure, useWindowSize} from "react-use";
 import {NextButtonContext, ShowSettingsContext, ShowStateHistoryContext} from '../../App';
 import {PageName, ShowState} from '../../cookies/show-state';
+import {getActivePage} from '../../cookies/show-state-history-utils';
 
 /**
  * TODO
@@ -126,13 +127,14 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
     performerIndex: performerIndexFromHistory,
     randomPunishmentPool,
     wheelRotationDegrees: wheelRotationDegreesFromHistory,
+    pageState
   } = showStateHistory[showStateHistory.length - 1];
 
   // TODO randomize the time spent spinning?
   const animationDuration = 5000;
   const [spinIterator, setSpinIterator] = useState<number>(performerIndexFromHistory);
   const [nextAnimationDegrees, setNextAnimationDegrees] = useState<number>(wheelRotationDegreesFromHistory);
-  const [assignedPunishment, setAssignedPunishment] = useState<string>('');
+  const [assignedPunishment, setAssignedPunishment] = useState<string>(pageState.assignedPunishment);
 
   const defaultStyle: CSSProperties = {
     transform: `rotate(${nextAnimationDegrees}deg)`,
@@ -143,24 +145,17 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
   const [playSpinMusic, { stop: stopSpinMusic }] = useSound(triPoloskiMusic);
 
-  const getActivePage = (): string => {
-    if(showCoverMessage) {
-      return PageName.PERFORMER_PUNISHMENT_PAGE
-    } else {
-      return PageName.WHEEL_PAGE;
-    }
-  };
-
   const updateShowStateHistory = () => {
     const updatedShowStateHistory = showStateHistory;
     const latestUpdate: ShowState = {
-      performerIndex: spinIterator - 1,
+      performerIndex: spinIterator,
       randomPunishmentPool: randomPunishmentPool.filter((punishment) => punishment !== assignedPunishment),
-      activePage: getActivePage(),
+      activePage: getActivePage(showCoverMessage),
       wheelRotationDegrees: nextAnimationDegrees,
       pageState: {
         isShowStarted: true,
-        showCoverMessage: showCoverMessage
+        showCoverMessage,
+        assignedPunishment,
       }
     };
     console.log('History updated with: ', latestUpdate);
@@ -168,6 +163,10 @@ export const SpinningWheel: React.FC<WheelProps> = (props: WheelProps) => {
 
     setShowStateHistory({showStateHistory: updatedShowStateHistory});
   }
+
+  useEffect(() => {
+    updateShowStateHistory();
+  }, [showCoverMessage]);
 
   useEffect(() => {
     if (isWheelSpinRequested) {
