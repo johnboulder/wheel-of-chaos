@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.24.0",
+    "react-screen-wake-lock": "^3.0.2",
     "react-scripts": "5.0.1",
     "react-transition-group": "^4.4.5",
     "react-use": "^17.5.0",
@@ -33,8 +34,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": {
     "production": [

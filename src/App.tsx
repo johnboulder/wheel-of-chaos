@@ -24,6 +24,7 @@ import {
   ShowStateHistoryContextType
 } from './cookies/show-state';
 import {hideElementTransitionStyle, showElementTransitionStyle} from './utils/css-util';
+import {useWakeLock} from 'react-screen-wake-lock';
 
 export const ShowSettingsContext = createContext<ShowSettingsContextType>(DEFAULT_SHOW_SETTINGS_CONTEXT);
 export const ShowStateHistoryContext = createContext<ShowStateHistoryContextType>(DEFAULT_SHOW_STATE_HISTORY_CONTEXT);
@@ -32,6 +33,19 @@ export const NextButtonContext = createContext<NextButton>(DEFAULT_NEXT_BUTTON_C
 const App = () => {
   const today = new Date();
   const tenYearsFromNow = new Date(today.getFullYear() + 10, today.getMonth(), today.getDate());
+  const { isSupported, released, request, release } = useWakeLock({
+    onRequest: () => console.log('Screen Wake Lock: requested!'),
+    onError: () => console.log('An error happened 💥'),
+    onRelease: () => console.log('Screen Wake Lock: released!'),
+  });
+
+  if(isSupported) {
+    request();
+  }
+
+  window.addEventListener("beforeunload", function(e){
+    release();
+  });
 
   const [cookies, setCookie] = useCookies([SHOW_SETTINGS_COOKIE_KEY, SHOW_STATE_HISTORY_COOKIE_KEY]);
 
